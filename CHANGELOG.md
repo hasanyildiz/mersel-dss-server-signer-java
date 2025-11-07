@@ -9,18 +9,53 @@ ve bu proje [Semantic Versioning](https://semver.org/spec/v2.0.0.html) kullanmak
 
 ### Added
 
+- 🐳 **Docker & Docker Compose Desteği** - Production-ready containerization
+  - **Dockerfile** - Multi-stage build (Maven build + JRE runtime)
+    - Eclipse Temurin 8 JRE (AdoptOpenJDK resmi devamı)
+    - Java 8 compatibility (production-tested)
+    - Optimized layers (dependencies cache)
+    - Non-root user (security best practice)
+    - Built-in health check
+    - Image size: ~250MB
+  - **docker-compose.yml** - Tam monitoring stack
+    - Sign API service
+    - Prometheus (metrics collection)
+    - Grafana (visualization) - Dashboard ID: **11378**
+    - AlertManager (optional profile)
+    - Persistent volumes
+    - Health checks tüm servislerde
+  - **.dockerignore** - Build optimization
+  - **.env.example** - Environment variables template
+  - **Monitoring Stack Yapılandırmaları**
+    - `devops/monitoring/prometheus/prometheus.yml` - Scrape config
+    - `devops/monitoring/prometheus/alerts.yml` - 8 alert rule
+    - `devops/monitoring/grafana/provisioning/` - Otomatik datasource ve dashboard
+    - `devops/monitoring/alertmanager/alertmanager.yml` - Alert routing
 
 - 🖥️ **Cross-Platform Script Desteği** - Windows ve Unix için ayrı script'ler
-  - **Unix/Linux/macOS** (`scripts/unix/`)
-    - 5 bash script (.sh)
+  - **Unix/Linux/macOS** (`scripts/unix/` ve `devops/docker/unix/`)
+    - 5 bash script (.sh) - Ana script'ler
+    - 3 Docker helper script (.sh) - Test kurum başlatma
     - Tam özellik desteği
     - Renkli terminal çıktısı
-  - **Windows PowerShell** (`scripts/windows/`)
-    - 4 PowerShell script (.ps1)
+  - **Windows PowerShell** (`scripts/windows/` ve `devops/docker/windows/`)
+    - 4 PowerShell script (.ps1) - Ana script'ler
+    - 3 Docker helper script (.ps1) - Test kurum başlatma
     - Modern Windows (10/11) için optimize
     - Renkli çıktı desteği
     - Execution policy yönetimi
   - Her platform için ayrı README dökümanları
+  - **Not:** Windows Batch (.bat) desteği kaldırıldı - PowerShell daha modern ve güçlü
+
+- 📂 **DevOps Klasörü Organizasyonu** - Modern repository yapısı
+  - `devops/docker/` - Docker deployment files
+    - `.env.test.kurum1/2/3` - Hazır test kurum yapılandırmaları
+    - `.env` symlink - Varsayılan: test kurum 1
+    - `unix/` - Unix/Linux/macOS helper scripts
+    - `windows/` - Windows PowerShell helper scripts
+  - `devops/monitoring/` - Monitoring configurations
+  - `devops/kubernetes/` - Kubernetes manifests placeholder (v0.2.0)
+  - `devops/README.md` - DevOps overview
 
 - 🚀 **Hızlı Başlatma Script'leri** - Hazır test sertifikaları ile tek komutla başlatma
   - **İnteraktif Script**: `scripts/quick-start-with-test-certs.sh` - Sertifika seçimi ve otomatik yapılandırma
@@ -135,6 +170,11 @@ ve bu proje [Semantic Versioning](https://semver.org/spec/v2.0.0.html) kullanmak
   - Her platform için ayrı README
   - Script'ler otomatik olarak proje root dizinine geçer
   - Yerden bağımsız çalışma desteği (portable scripts)
+
+- 📦 **DevOps Yapılandırmaları**
+  - Tüm deployment dosyaları `devops/` altında organize edildi
+  - Docker, monitoring ve Kubernetes için ayrı klasörler
+  - Gelecekte genişletilebilir yapı (CI/CD, Terraform, vb.)
   
 - 🎯 **SignatureApplication** - Command-line argüman desteği
   - `--list-certificates` / `--list-certs`: Sertifikaları listele
@@ -293,10 +333,13 @@ Bu proje [Semantic Versioning](https://semver.org/) kullanır:
 
 ### v0.2.0 (Planlanan)
 - ✅ ~~Metrics (Prometheus)~~ - v0.1.0'da eklendi
+- ✅ ~~Docker ve Docker Compose~~ - v0.1.0'da eklendi
+- Kubernetes manifests
 - Rate limiting
 - API Authentication
 - Asenkron imzalama
 - Batch imzalama
+- CI/CD pipeline (GitHub Actions)
 
 ### v0.3.0 (Planlanan)
 - CAdES imza desteği

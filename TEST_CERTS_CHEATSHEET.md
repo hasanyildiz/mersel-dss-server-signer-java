@@ -7,52 +7,100 @@
 
 ## 📋 Hızlı Komutlar
 
-### Unix/Linux/macOS
+### Docker ile Başlatma (Önerilen) - Parametreli Script
 
 ```bash
-# İnteraktif
-./scripts/unix/quick-start-with-test-certs.sh
+# Unix/Linux/macOS
+cd devops/docker
 
-# Direkt başlatma
-./scripts/unix/start-test1.sh
-./scripts/unix/start-test2.sh
-./scripts/unix/start-test3.sh
+# Kurum 1 - Sadece RSA
+./unix/start-test-kurum.sh 1          # testkurum01 (RSA - default)
+
+# Kurum 2 - RSA veya EC384
+./unix/start-test-kurum.sh 2 rsa      # testkurum02 (RSA)
+./unix/start-test-kurum.sh 2 ec384    # testkurum02 (EC384)
+
+# Kurum 3 - RSA veya EC384
+./unix/start-test-kurum.sh 3 rsa      # testkurum03 (RSA)
+./unix/start-test-kurum.sh 3 ec384    # testkurum03 (EC384)
 ```
-
-### Windows (PowerShell)
 
 ```powershell
-# İnteraktif
-.\scripts\windows\quick-start-with-test-certs.ps1
+# Windows (PowerShell)
+cd devops\docker
 
-# Direkt başlatma
-.\scripts\windows\start-test1.ps1
-.\scripts\windows\start-test2.ps1
-.\scripts\windows\start-test3.ps1
+# Kurum 1 - Sadece RSA
+.\windows\start-test-kurum.ps1 1          # testkurum01 (RSA - default)
+
+# Kurum 2 - RSA veya EC384
+.\windows\start-test-kurum.ps1 2 rsa      # testkurum02 (RSA)
+.\windows\start-test-kurum.ps1 2 ec384    # testkurum02 (EC384)
+
+# Kurum 3 - RSA veya EC384
+.\windows\start-test-kurum.ps1 3 rsa      # testkurum03 (RSA)
+.\windows\start-test-kurum.ps1 3 ec384    # testkurum03 (EC384)
 ```
 
-### Manuel Başlatma
+### Docker Compose (Manuel)
 
 ```bash
-# Sertifika 1
-export PFX_PATH=./resources/test-certs/testkurum01@test.com.tr_614573.pfx
+cd devops/docker
+
+# Varsayılan (Kurum 1 - RSA)
+docker-compose up -d
+
+# Script .env.temp oluşturduğu için manuel kullanım:
+# Script kullanmanız önerilir, ancak manuel yapmak isterseniz:
+docker-compose --env-file .env.test.kurum1 up -d  # Kurum 1 (RSA)
+
+# Logları izle
+docker-compose logs -f sign-api
+
+# Durdur
+docker-compose down
+```
+
+### Manuel Başlatma (Yerel - Docker olmadan)
+
+```bash
+# RSA Sertifikalar
+
+# Kurum 1 - RSA 2048
+export PFX_PATH=./resources/test-certs/testkurum01_rsa2048@test.com.tr_614573.pfx
 export CERTIFICATE_PIN=614573
-export CERTIFICATE_ALIAS=1
-export IS_TUBITAK_TSP=false
+export CERTIFICATE_ALIAS=testkurum01
 mvn spring-boot:run
 
-# Sertifika 2
-export PFX_PATH=./resources/test-certs/testkurum02@sm.gov.tr_059025.pfx
-export CERTIFICATE_PIN=059025
-export CERTIFICATE_ALIAS=1
-export IS_TUBITAK_TSP=false
-mvn spring-boot:run
-
-# Sertifika 3
-export PFX_PATH=./resources/test-certs/testkurum3@test.com.tr_181193.pfx
+# Kurum 3 - RSA 2048
+export PFX_PATH=./resources/test-certs/testkurum3_rsa2048@test.com.tr_181193.pfx
 export CERTIFICATE_PIN=181193
-export CERTIFICATE_ALIAS=1
-export IS_TUBITAK_TSP=false
+export CERTIFICATE_ALIAS=testkurum3
+mvn spring-boot:run
+
+# Kurum 5 - RSA 2048
+export PFX_PATH=./resources/test-certs/testkurum02_rsa2048@sm.gov.tr_059025.pfx
+export CERTIFICATE_PIN=059025
+export CERTIFICATE_ALIAS=testkurum02
+mvn spring-boot:run
+
+# EC384 Sertifikalar
+
+# Kurum 2 - EC384
+export PFX_PATH=./resources/test-certs/testkurum2_ec384@test.com.tr_825095.pfx
+export CERTIFICATE_PIN=825095
+export CERTIFICATE_ALIAS=testkurum2
+mvn spring-boot:run
+
+# Kurum 4 - EC384
+export PFX_PATH=./resources/test-certs/testkurum17_ec384@test.com.tr_328829.pfx
+export CERTIFICATE_PIN=328829
+export CERTIFICATE_ALIAS=testkurum17
+mvn spring-boot:run
+
+# Kurum 6 - EC384
+export PFX_PATH=./resources/test-certs/testkurum3_ec384@test.com.tr_540425.pfx
+export CERTIFICATE_PIN=540425
+export CERTIFICATE_ALIAS=testkurum3_ec
 mvn spring-boot:run
 ```
 
@@ -94,27 +142,59 @@ curl -X POST http://localhost:8085/v1/wssecuritysign \
 
 ## 📊 Sertifika Bilgileri
 
-| Özellik | Sertifika 1 | Sertifika 2 | Sertifika 3 |
-|---------|------------|------------|------------|
-| **Dosya** | `testkurum01@test.com.tr_614573.pfx` | `testkurum02@sm.gov.tr_059025.pfx` | `testkurum3@test.com.tr_181193.pfx` |
-| **Parola** | `614573` | `059025` | `181193` |
-| **Email** | testkurum01@test.com.tr | testkurum02@sm.gov.tr | testkurum3@test.com.tr |
-| **Konum** | `resources/test-certs/` | `resources/test-certs/` | `resources/test-certs/` |
+| Kurum | Algoritma | Dosya | Parola | Alias |
+|-------|-----------|-------|--------|-------|
+| **Kurum 1** | RSA 2048 | `testkurum01_rsa2048@test.com.tr_614573.pfx` | `614573` | `testkurum01` |
+| **Kurum 2** | RSA 2048 | `testkurum02_rsa2048@sm.gov.tr_059025.pfx` | `059025` | `testkurum02` |
+| **Kurum 2** | **EC384** | `testkurum02_ec384@test.com.tr_825095.pfx` | `825095` | `testkurum02_ec` |
+| **Kurum 3** | RSA 2048 | `testkurum03_rsa2048@test.com.tr_181193.pfx` | `181193` | `testkurum03` |
+| **Kurum 3** | **EC384** | `testkurum03_ec384@test.com.tr_540425.pfx` | `540425` | `testkurum03_ec` |
+
+**Not:** Tüm sertifikalar `resources/test-certs/` klasöründe bulunuyor.
+
+### Kurum Özellikleri
+
+- **Kurum 1:** Sadece RSA 2048 desteği
+- **Kurum 2:** RSA 2048 + EC384 desteği (hem RSA hem EC ile test yapabilirsiniz)
+- **Kurum 3:** RSA 2048 + EC384 desteği (hem RSA hem EC ile test yapabilirsiniz)
 
 ## 🔍 Sertifika İnceleme
 
+### Keytool ile İnceleme
+
 ```bash
-# Sertifika 1
-keytool -list -v -keystore resources/test-certs/testkurum01@test.com.tr_614573.pfx \
+# Kurum 1 - RSA
+keytool -list -v -keystore resources/test-certs/testkurum01_rsa2048@test.com.tr_614573.pfx \
   -storetype PKCS12 -storepass 614573
 
-# Sertifika 2
-keytool -list -v -keystore resources/test-certs/testkurum02@sm.gov.tr_059025.pfx \
+# Kurum 2 - RSA
+keytool -list -v -keystore resources/test-certs/testkurum02_rsa2048@sm.gov.tr_059025.pfx \
   -storetype PKCS12 -storepass 059025
 
-# Sertifika 3
-keytool -list -v -keystore resources/test-certs/testkurum3@test.com.tr_181193.pfx \
+# Kurum 2 - EC384
+keytool -list -v -keystore resources/test-certs/testkurum02_ec384@test.com.tr_825095.pfx \
+  -storetype PKCS12 -storepass 825095
+
+# Kurum 3 - RSA
+keytool -list -v -keystore resources/test-certs/testkurum03_rsa2048@test.com.tr_181193.pfx \
   -storetype PKCS12 -storepass 181193
+
+# Kurum 3 - EC384
+keytool -list -v -keystore resources/test-certs/testkurum03_ec384@test.com.tr_540425.pfx \
+  -storetype PKCS12 -storepass 540425
+```
+
+### OpenSSL ile Detaylı İnceleme
+
+```bash
+# Public key algoritmasını kontrol et (RSA vs EC)
+openssl pkcs12 -in resources/test-certs/testkurum01_rsa2048@test.com.tr_614573.pfx \
+  -passin pass:614573 -nokeys -clcerts | \
+  openssl x509 -text -noout | grep -E "(Subject:|Public Key Algorithm:|Public-Key:)"
+
+# Sertifika zincirini görüntüle
+openssl pkcs12 -info -in resources/test-certs/testkurum2_ec384@test.com.tr_825095.pfx \
+  -passin pass:825095 -nokeys
 ```
 
 ## 🌐 API Endpoint'leri
@@ -187,14 +267,33 @@ rm -f test*.xml signed*.xml signed*.pdf
 
 ## 🔄 Sertifika Değiştirme (Çalışırken)
 
+### Docker ile (Önerilen)
+
+```bash
+cd devops/docker
+
+# 1. Mevcut servisi durdur
+docker-compose down
+
+# 2. Farklı kurum/algoritma ile başlat
+./unix/start-test-kurum.sh 2 ec384  # Kurum 2 - EC384'e geç
+# veya
+./unix/start-test-kurum.sh 3 rsa    # Kurum 3 - RSA'ya geç
+
+# 3. Logları kontrol et
+docker-compose logs -f sign-api
+```
+
+### Yerel Ortamda
+
 ```bash
 # 1. API'yi durdur (Ctrl+C veya)
 pkill -f "spring-boot:run"
 
-# 2. Yeni sertifika ayarla
-export PFX_PATH=./resources/test-certs/testkurum02@sm.gov.tr_059025.pfx
-export CERTIFICATE_PIN=059025
-export CERTIFICATE_ALIAS=1
+# 2. Yeni sertifika ayarla (örnek: EC384'e geç)
+export PFX_PATH=./resources/test-certs/testkurum2_ec384@test.com.tr_825095.pfx
+export CERTIFICATE_PIN=825095
+export CERTIFICATE_ALIAS=testkurum2
 
 # 3. Yeniden başlat
 mvn spring-boot:run
@@ -219,24 +318,46 @@ sleep 15
 kill $API_PID
 ```
 
-### Tüm Sertifikalarla Test
+### Tüm Sertifikalarla Test (Docker)
 
 ```bash
-for i in 1 2 3; do
-  echo "🔐 Test Sertifikası $i ile test başlıyor..."
-  ./scripts/start-test${i}.sh &
-  APP_PID=$!
-  sleep 15
+cd devops/docker
+
+# Test dökümanı oluştur
+echo '<?xml version="1.0"?><test>data</test>' > test.xml
+
+# Test kombinasyonları
+declare -a TESTS=(
+  "1:rsa"       # Kurum 1 - RSA
+  "2:rsa"       # Kurum 2 - RSA
+  "2:ec384"     # Kurum 2 - EC384
+  "3:rsa"       # Kurum 3 - RSA
+  "3:ec384"     # Kurum 3 - EC384
+)
+
+# Her kombinasyon için test et
+for test in "${TESTS[@]}"; do
+  IFS=':' read -r kurum type <<< "$test"
+  echo "🔐 Test Kurum $kurum ($type) ile test başlıyor..."
   
+  ./unix/start-test-kurum.sh $kurum $type
+  echo "Servisin başlaması bekleniyor..."
+  sleep 30
+  
+  # XAdES imzalama testi
   curl -s -X POST http://localhost:8085/v1/xadessign \
     -F "document=@test.xml" \
     -F "documentType=None" \
-    -o "signed-cert${i}.xml"
+    -o "signed-kurum${kurum}-${type}.xml"
   
-  kill $APP_PID
-  wait $APP_PID 2>/dev/null
-  sleep 2
+  echo "✅ Kurum $kurum ($type) testi tamamlandı"
+  
+  docker-compose down
+  sleep 5
 done
+
+echo "🎉 Tüm testler tamamlandı!"
+ls -lh signed-kurum*.xml
 ```
 
 ## 🐛 Sorun Giderme
@@ -299,16 +420,21 @@ export JAVA_HOME=/path/to/java
 
 ## 💡 Yararlı İpuçları
 
-1. **Farklı portlarda çalıştır:**
+1. **Docker ile RSA ve EC384 karşılaştırma:**
    ```bash
-   export SERVER_PORT=9090
-   ./start-test1.sh
+   # RSA ile test (Kurum 2)
+   cd devops/docker && ./unix/start-test-kurum.sh 2 rsa
+   curl -X POST http://localhost:8085/v1/xadessign -F "document=@test.xml" -F "documentType=None" -o rsa-signed.xml
+   
+   # EC384 ile test (Kurum 2)
+   docker-compose down && ./unix/start-test-kurum.sh 2 ec384
+   curl -X POST http://localhost:8085/v1/xadessign -F "document=@test.xml" -F "documentType=None" -o ec-signed.xml
    ```
 
 2. **Debug mode:**
    ```bash
    export LOGGING_LEVEL_ROOT=DEBUG
-   ./start-test1.sh
+   mvn spring-boot:run
    ```
 
 3. **Timestamp etkinleştir:**
@@ -316,12 +442,24 @@ export JAVA_HOME=/path/to/java
    export IS_TUBITAK_TSP=true
    export TS_USER_ID=your-id
    export TS_USER_PASSWORD=your-password
-   ./scripts/start-test1.sh
+   mvn spring-boot:run
    ```
 
-4. **Hızlı yeniden başlatma:**
+4. **Docker ile hızlı yeniden başlatma:**
    ```bash
-   pkill -f spring-boot; sleep 2; ./scripts/start-test1.sh
+   cd devops/docker
+   docker-compose down && docker-compose up -d && docker-compose logs -f sign-api
+   ```
+
+5. **Prometheus + Grafana ile monitoring:**
+   ```bash
+   # Docker Compose otomatik olarak başlatır
+   cd devops/docker && ./unix/start-test-kurum.sh 1
+   
+   # URL'ler:
+   # - Sign API: http://localhost:8085
+   # - Prometheus: http://localhost:9090
+   # - Grafana: http://localhost:3000 (admin/admin)
    ```
 
 ---
