@@ -2,6 +2,20 @@
 
 Bu dizinde Sign API'yi test etmek için basit cURL script'leri bulunmaktadır.
 
+## 🎯 Hızlı Test (Hazır Sertifikalarla)
+
+Repo içindeki test sertifikaları ile otomatik test:
+
+```bash
+# API'yi başlat (başka bir terminalde)
+../../scripts/quick-start-with-test-certs.sh
+
+# Tüm endpoint'leri otomatik test et
+../../scripts/test-with-bundled-certs.sh
+```
+
+**Detaylı bilgi:** [../../TEST_CERTIFICATES.md](../../TEST_CERTIFICATES.md)
+
 ## Gereksinimler
 
 - bash

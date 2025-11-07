@@ -60,6 +60,15 @@ Türkiye e-imza standartlarına uygun elektronik imza (XAdES, PAdES, WS-Security
 
 > 🚀 **5 dakikada başlamak için:** [QUICK_START.md](QUICK_START.md)
 
+> 🎯 **Hazır test sertifikaları ile hemen başla:** [TEST_CERTIFICATES.md](TEST_CERTIFICATES.md)
+>
+> ```bash
+> ./scripts/quick-start-with-test-certs.sh
+> ```
+>
+> ⚠️ **UYARI:** Test sertifikaları sadece geliştirme/test içindir!  
+> Production'da resmi CA sertifikası kullanın.
+
 ### Gereksinimler
 
 - Java 8 veya üzeri
@@ -129,12 +138,22 @@ mvn spring-boot:run
 
 API `http://localhost:8085` adresinde erişilebilir olacaktır.
 
-### API Dokümantasyonu
+### API Endpoint'leri
 
-İnteraktif API dokümantasyonu (Swagger UI):
-```
-http://localhost:8085/swagger/index.html
-```
+**Dokümantasyon ve Monitoring:**
+- Swagger UI: http://localhost:8085/swagger/index.html
+- Health Check: http://localhost:8085/actuator/health
+- Application Info: http://localhost:8085/actuator/info
+- Prometheus Metrics: http://localhost:8085/actuator/prometheus
+
+**İmzalama Endpoint'leri:**
+- XAdES Signature: `POST /v1/xadessign`
+- PAdES Signature: `POST /v1/padessign`
+- WS-Security Signature: `POST /v1/wssecuritysign`
+- TÜBİTAK Credit: `GET /api/tubitak/credit`
+
+> 📘 Actuator: [docs/ACTUATOR_ENDPOINTS.md](docs/ACTUATOR_ENDPOINTS.md)  
+> 📊 Monitoring: [docs/MONITORING.md](docs/MONITORING.md) - Prometheus & Grafana (Dashboard ID: **11378**)
 
 ## Kullanım Örnekleri
 
@@ -351,6 +370,9 @@ Detaylı dokümantasyon için:
 
 - 📘 [Sertifika Seçimi Rehberi](docs/CERTIFICATE_SELECTION.md) - Alias, serial number ve OID bilgileri
 - 🚀 [Hızlı Başlangıç](QUICK_START.md) - 5 dakikada kurulum ve kullanım
+- 🧪 [Test Sertifikaları](TEST_CERTIFICATES.md) - Hazır test sertifikaları ile hızlı başlangıç
+- 🔍 [Actuator Endpoints](docs/ACTUATOR_ENDPOINTS.md) - Health check ve metrics
+- 📊 [Monitoring](docs/MONITORING.md) - Prometheus & Grafana (Dashboard: **11378**)
 - ⚡ [Performans Optimizasyonu](docs/PERFORMANCE.md) - Production ayarları ve tuning
 - 🧪 [Test Dokümantasyonu](docs/TESTING.md) - Test stratejileri ve örnekler
 - 🔐 [Güvenlik](SECURITY.md) - Güvenlik en iyi uygulamaları

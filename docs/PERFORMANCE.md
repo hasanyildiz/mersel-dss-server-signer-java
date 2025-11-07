@@ -146,7 +146,6 @@ PKCS11_RETRY_DELAY=1000
 ```properties
 # Spring Boot Actuator
 management.endpoints.web.exposure.include=health,info,metrics,prometheus
-management.endpoint.health.show-details=when-authorized
 management.metrics.export.prometheus.enabled=true
 ```
 

@@ -18,10 +18,10 @@ public class SignatureServiceConfiguration {
     @Value("${CERTIFICATE_PIN}")
     private String certificatePin;
 
-    @Value("${CERTIFICATE_SERIAL_NUMBER}")
+    @Value("${CERTIFICATE_SERIAL_NUMBER:}")
     private String certificateSerialNumber;
 
-    @Value("${CERTIFICATE_ALIAS}")
+    @Value("${CERTIFICATE_ALIAS:}")
     private String certificateAlias;
 
     @Value("${CERTIFICATE_CHAIN_GET_ONLINE:true}")

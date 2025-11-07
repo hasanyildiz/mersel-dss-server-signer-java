@@ -8,6 +8,59 @@ ve bu proje [Semantic Versioning](https://semver.org/spec/v2.0.0.html) kullanmak
 ## [Unreleased]
 
 ### Added
+
+- 🚀 **Hızlı Başlatma Script'leri** - Hazır test sertifikaları ile tek komutla başlatma
+  - **İnteraktif Script**: `scripts/quick-start-with-test-certs.sh` - Sertifika seçimi ve otomatik yapılandırma
+  - **Direkt Başlatma**: `scripts/start-test1.sh`, `start-test2.sh`, `start-test3.sh` - Her sertifika için ayrı script
+  - **Otomatik Test**: `scripts/test-with-bundled-certs.sh` - Tüm API endpoint'lerini otomatik test eder
+  - Renkli terminal çıktısı ve kullanıcı dostu mesajlar
+  - TÜBİTAK timestamp opsiyonel yapılandırma desteği
+  - Environment variable'lar otomatik ayarlanır
+  - Cross-directory çalışma desteği (nereden çağırılırsa çağırılsın çalışır)
+
+- 📊 **Prometheus Metrics Export** - Production-grade monitoring desteği
+  - **Micrometer Prometheus Registry** dependency eklendi
+  - **Prometheus Endpoint**: `/actuator/prometheus` - 40+ metrik export edilir
+  - **Metrics Detail Endpoint**: `/actuator/metrics/{name}` - Belirli metrik detayları
+  - HTTP request metrics (count, duration, percentiles)
+  - JVM metrics (memory, GC, threads, classes)
+  - System metrics (CPU, disk, uptime)
+  - Tomcat metrics (sessions, threads)
+  - Percentile histogram desteği (p50, p95, p99)
+  - Application tagging (multi-instance monitoring için)
+
+- 🔍 **Spring Boot Actuator** - Health check ve monitoring
+  - **Health Check Endpoint**: `/actuator/health` - API sağlık durumu
+  - **Info Endpoint**: `/actuator/info` - Uygulama bilgileri
+  - Kubernetes liveness/readiness probe desteği
+  - Docker health check desteği
+  - CI/CD pipeline entegrasyonu için hazır
+
+- 📚 **Kapsamlı Monitoring Dökümanları**
+  - **docs/MONITORING.md** - Prometheus & Grafana kurulum rehberi
+    - Önerilen Grafana Dashboard ID: **11378** (Spring Boot 2.x)
+    - Docker Compose monitoring stack örneği
+    - Prometheus scrape yapılandırması
+    - Alert rules örnekleri (API down, high error rate, high memory, vb.)
+    - Grafana panel örnekleri
+    - Önemli metrikler ve PromQL sorguları
+    - Production deployment örnekleri (Docker, Kubernetes)
+  - **docs/ACTUATOR_ENDPOINTS.md** - Actuator endpoint'leri detaylı rehber
+    - Health, Info, Prometheus, Metrics endpoint'leri
+    - Kubernetes probe yapılandırması
+    - CI/CD entegrasyon örnekleri
+  - **TEST_CERTIFICATES.md** - Test sertifikaları kullanım rehberi
+  - **TEST_CERTS_CHEATSHEET.md** - Hızlı başvuru kılavuzu
+  - **scripts/README.md** - Script'ler dökümanı
+
+- 🔐 **Test Sertifikaları** - Geliştirme ortamı için hazır sertifikalar
+  - 3 adet test PFX sertifikası (`resources/test-certs/`)
+  - `testkurum01@test.com.tr_614573.pfx` (Parola: 614573)
+  - `testkurum02@sm.gov.tr_059025.pfx` (Parola: 059025)
+  - `testkurum3@test.com.tr_181193.pfx` (Parola: 181193)
+  - Dosya isminde `_` sonrası parola formatı (kullanıcı dostu)
+  - Güvenilir kök sertifikalarla uyumlu (normal doğrulama çalışır)
+
 - 🔥 **Sertifika Listeleme API'si** - Native Java ile keystore sertifikalarını listeleme
   - **REST API**: `GET /api/certificates/list` - Çalışan API'den sertifika listesi
   - **REST API**: `GET /api/certificates/info` - Keystore bilgileri
@@ -45,12 +98,27 @@ ve bu proje [Semantic Versioning](https://semver.org/spec/v2.0.0.html) kullanmak
   - Hem PFX hem PKCS#11 desteği
 
 ### Changed
+
+- 🔧 **Sertifika Yapılandırması İyileştirmeleri**
+  - `CERTIFICATE_SERIAL_NUMBER` artık opsiyonel (varsayılan: boş string)
+  - `CERTIFICATE_ALIAS` artık opsiyonel (varsayılan: boş string)
+  - SignatureServiceConfiguration - Varsayılan değerler eklendi
+  - Test sertifikaları için `CERTIFICATE_ALIAS=1` kullanımı
+  - Sertifika bulunamazsa daha açıklayıcı hata mesajları
+
 - 📖 **Dokümantasyon İyileştirmeleri**
-  - README.md - Yeni "Dokümantasyon" bölümü eklendi
-  - QUICK_START.md - Sertifika seçimi açıklamaları genişletildi
-  - application.properties - Detaylı sertifika seçimi yorumları eklendi
-  - examples/README.md - Sertifika bilgisi bulma adımı eklendi
-  - docs/CERTIFICATE_SELECTION.md - macOS ARM64 sorunları ve çözümleri eklendi
+  - README.md - Monitoring bölümü ve Grafana Dashboard ID eklendi
+  - README.md - Actuator endpoint'leri listeye eklendi
+  - QUICK_START.md - Test sertifikaları bölümü eklendi (öncelikli pozisyon)
+  - QUICK_START.md - Health check endpoint referansları
+  - SECURITY.md - Test sertifikaları güvenlik uyarısı eklendi
+  - examples/curl/README.md - Test script'leri referansları
+  - application.properties - Actuator ve Prometheus yapılandırması eklendi
+
+- 📁 **Script Organizasyonu**
+  - Tüm yardımcı script'ler `scripts/` klasörü altına taşındı
+  - Script'ler otomatik olarak proje root dizinine geçer
+  - Yerden bağımsız çalışma desteği (portable scripts)
   
 - 🎯 **SignatureApplication** - Command-line argüman desteği
   - `--list-certificates` / `--list-certs`: Sertifikaları listele
@@ -58,7 +126,32 @@ ve bu proje [Semantic Versioning](https://semver.org/spec/v2.0.0.html) kullanmak
   - `--version` / `-v`: Versiyon bilgisi
   - Spring context olmadan hızlı çalışma
 
+### Improved
+
+- 🧪 **Test Workflow İyileştirmeleri**
+  - `test-with-bundled-certs.sh` - Actuator health check ile API hazır kontrolü
+  - Daha güvenilir başlangıç kontrolü
+  - Renkli test sonuçları ve özet rapor
+  - Otomatik test dosyası oluşturma (XML, PDF, SOAP)
+
 ### Technical Details
+
+- **pom.xml Güncellemeleri**
+  - `spring-boot-starter-actuator` dependency eklendi
+  - `micrometer-registry-prometheus` dependency eklendi
+  - Spring Boot parent version: 2.7.18
+
+- **application.properties Yapılandırması**
+  - `management.endpoints.web.exposure.include=health,info,prometheus,metrics`
+  - `management.metrics.export.prometheus.enabled=true`
+  - `management.metrics.distribution.percentiles-histogram.http.server.requests=true`
+  - `management.metrics.tags.application=${spring.application.name}`
+
+- **Sertifika Validation**
+  - CertificateValidatorService - Normal güven doğrulaması korundu
+  - Test sertifikaları güvenilir köklerle çalışıyor
+  - SKIP_CERTIFICATE_TRUST_VALIDATION gereksiz karmaşıklık kaldırıldı
+
 - **Yeni DTO**: `CertificateInfoDto` - Sertifika bilgileri (alias, serial, OID'ler)
 - **Yeni Service**: `CertificateInfoService` - Keystore okuma ve OID extraction
   - `extractKeyUsage()` - 9 farklı Key Usage biti
@@ -183,11 +276,12 @@ Bu proje [Semantic Versioning](https://semver.org/) kullanır:
 ## Gelecek Sürümler
 
 ### v0.2.0 (Planlanan)
+- ✅ ~~Metrics (Prometheus)~~ - v0.1.0'da eklendi
 - Docker ve Docker Compose
 - Rate limiting
+- API Authentication
 - Asenkron imzalama
 - Batch imzalama
-- Metrics (Prometheus)
 
 ### v0.3.0 (Planlanan)
 - CAdES imza desteği

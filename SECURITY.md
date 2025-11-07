@@ -1,5 +1,29 @@
 # Güvenlik Politikası
 
+## ⚠️ Test Sertifikaları Uyarısı
+
+**UYARI:** Repo içindeki test sertifikaları **SADECE geliştirme ve test ortamları** içindir!
+
+#### ❌ Production Ortamında ASLA Test Sertifikalarını Kullanmayın!
+
+```bash
+# ❌ TEHLİKELİ - Production için YANLIŞ
+# Test sertifikalarını production'da kullanmak
+
+# ✅ GÜVENLİ - Production için DOĞRU
+# Resmi, güvenilir bir CA tarafından imzalanmış sertifika kullanın
+```
+
+#### 📋 Production Kontrol Listesi
+
+Production'a geçmeden önce kontrol edin:
+- [ ] Resmi bir Certificate Authority (CA) tarafından imzalanmış sertifika kullanılıyor
+- [ ] Sertifika zinciri tam ve geçerli
+- [ ] Test sertifikaları kaldırıldı
+- [ ] TÜBİTAK timestamp kullanılıyor (Türkiye için)
+
+---
+
 ## Güvenlik En İyi Uygulamaları
 
 ### 🔐 Üretim Ortamı İçin Öneriler
@@ -41,7 +65,6 @@ chown app-user:app-group /path/to/hsm/library.so
 - [ ] Timeout değerleri ayarlanmış
 - [ ] Error mesajları kullanıcıya detaylı bilgi vermiyor
 - [ ] Security headers yapılandırılmış (CSP, HSTS, vb.)
-- [ ] Rate limiting veya API authentication mevcut
 - [ ] Monitoring ve alerting kurulu
 
 ## Bilinen Güvenlik Konuları

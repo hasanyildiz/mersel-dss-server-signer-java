@@ -2,7 +2,37 @@
 
 5 dakikada Sign API'yi çalıştırın!
 
-## ⚡ En Hızlı Yol (PFX ile)
+## 🎯 Hazır Test Sertifikaları ile (EN HIZLI!)
+
+Repo içinde 3 adet test sertifikası hazır! Tek komutla başlatın:
+
+```bash
+./scripts/quick-start-with-test-certs.sh
+```
+
+Bu script:
+- ✅ Sertifika seçmenizi sağlar (test1, test2, test3)
+- ✅ Otomatik yapılandırma yapar
+- ✅ Uygulamayı başlatır
+
+> ⚠️ **UYARI:** Bu test sertifikaları **sadece geliştirme/test ortamı** içindir!  
+> Production'da mutlaka resmi CA tarafından imzalanmış sertifika kullanın.
+
+**Detaylı bilgi:** [TEST_CERTIFICATES.md](TEST_CERTIFICATES.md)
+
+### Mevcut Test Sertifikaları
+
+| Sertifika | Parola | Konum |
+|-----------|--------|-------|
+| `testkurum01@test.com.tr_614573.pfx` | `614573` | `resources/test-certs/` |
+| `testkurum02@sm.gov.tr_059025.pfx` | `059025` | `resources/test-certs/` |
+| `testkurum3@test.com.tr_181193.pfx` | `181193` | `resources/test-certs/` |
+
+> 💡 **İpucu:** Dosya isminde `_` karakterinden sonraki kısım paroladır.
+
+---
+
+## ⚡ En Hızlı Yol (Kendi PFX'iniz ile)
 
 ### 1. Projeyi İndirin
 
@@ -43,7 +73,8 @@ mvn spring-boot:run
 ```
 
 ✅ API başladı: http://localhost:8085  
-✅ Swagger UI: http://localhost:8085/swagger/index.html
+✅ Swagger UI: http://localhost:8085/swagger/index.html  
+✅ Health Check: http://localhost:8085/actuator/health
 
 ### 5. İlk İmzanızı Oluşturun
 
@@ -159,8 +190,13 @@ curl http://localhost:8085/api/tubitak/credit
 API çalışıyor mu kontrol edin:
 
 ```bash
+# Health check
+curl http://localhost:8085/actuator/health
+
+# Port kontrolü
 lsof -i :8085
-# veya
+
+# Swagger UI
 curl http://localhost:8085/swagger/index.html
 ```
 
@@ -194,6 +230,7 @@ export IS_TUBITAK_TSP=false
 
 ## 📚 Daha Fazla Bilgi
 
+- [TEST_CERTIFICATES.md](TEST_CERTIFICATES.md) - **Hazır test sertifikaları ile hızlı başlatma**
 - [README.md](README.md) - Tam dokümantasyon
 - [docs/CERTIFICATE_SELECTION.md](docs/CERTIFICATE_SELECTION.md) - Sertifika seçimi rehberi (alias vs serial number)
 - [examples/](examples/) - Detaylı örnekler
