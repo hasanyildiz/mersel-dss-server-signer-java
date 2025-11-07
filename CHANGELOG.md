@@ -9,6 +9,19 @@ ve bu proje [Semantic Versioning](https://semver.org/spec/v2.0.0.html) kullanmak
 
 ### Added
 
+
+- 🖥️ **Cross-Platform Script Desteği** - Windows ve Unix için ayrı script'ler
+  - **Unix/Linux/macOS** (`scripts/unix/`)
+    - 5 bash script (.sh)
+    - Tam özellik desteği
+    - Renkli terminal çıktısı
+  - **Windows PowerShell** (`scripts/windows/`)
+    - 4 PowerShell script (.ps1)
+    - Modern Windows (10/11) için optimize
+    - Renkli çıktı desteği
+    - Execution policy yönetimi
+  - Her platform için ayrı README dökümanları
+
 - 🚀 **Hızlı Başlatma Script'leri** - Hazır test sertifikaları ile tek komutla başlatma
   - **İnteraktif Script**: `scripts/quick-start-with-test-certs.sh` - Sertifika seçimi ve otomatik yapılandırma
   - **Direkt Başlatma**: `scripts/start-test1.sh`, `start-test2.sh`, `start-test3.sh` - Her sertifika için ayrı script
@@ -116,7 +129,10 @@ ve bu proje [Semantic Versioning](https://semver.org/spec/v2.0.0.html) kullanmak
   - application.properties - Actuator ve Prometheus yapılandırması eklendi
 
 - 📁 **Script Organizasyonu**
-  - Tüm yardımcı script'ler `scripts/` klasörü altına taşındı
+  - Script'ler platform bazlı organize edildi
+  - `scripts/unix/` - Unix/Linux/macOS bash script'leri
+  - `scripts/windows/` - Windows PowerShell ve Batch script'leri
+  - Her platform için ayrı README
   - Script'ler otomatik olarak proje root dizinine geçer
   - Yerden bağımsız çalışma desteği (portable scripts)
   
@@ -277,7 +293,6 @@ Bu proje [Semantic Versioning](https://semver.org/) kullanır:
 
 ### v0.2.0 (Planlanan)
 - ✅ ~~Metrics (Prometheus)~~ - v0.1.0'da eklendi
-- Docker ve Docker Compose
 - Rate limiting
 - API Authentication
 - Asenkron imzalama

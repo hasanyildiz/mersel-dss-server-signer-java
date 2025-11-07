@@ -2,12 +2,21 @@
 
 5 dakikada Sign API'yi çalıştırın!
 
-## 🎯 Hazır Test Sertifikaları ile (EN HIZLI!)
+
+---
+
+## 🎯 Test Sertifikaları ile (Yerel)
 
 Repo içinde 3 adet test sertifikası hazır! Tek komutla başlatın:
 
+**Unix/Linux/macOS:**
 ```bash
-./scripts/quick-start-with-test-certs.sh
+./scripts/unix/quick-start-with-test-certs.sh
+```
+
+**Windows (PowerShell):**
+```powershell
+.\scripts\windows\quick-start-with-test-certs.ps1
 ```
 
 Bu script:

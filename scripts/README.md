@@ -2,22 +2,56 @@
 
 Bu klasörde Sign API için yardımcı script'ler bulunmaktadır.
 
+## 📁 Klasör Yapısı
+
+```
+scripts/
+├── unix/              # Unix/Linux/macOS script'leri (.sh)
+│   ├── quick-start-with-test-certs.sh
+│   ├── start-test1.sh
+│   ├── start-test2.sh
+│   ├── start-test3.sh
+│   ├── test-with-bundled-certs.sh
+│   └── README.md
+├── windows/           # Windows script'leri (.ps1)
+│   ├── quick-start-with-test-certs.ps1
+│   ├── start-test1.ps1
+│   ├── start-test2.ps1
+│   ├── start-test3.ps1
+│   └── README.md
+├── prepare-github-release.sh
+└── README.md          # Bu dosya
+```
+
+## 🖥️ Platform Desteği
+
+| Platform | Script Tipi | Konum |
+|----------|-------------|-------|
+| **Unix/Linux/macOS** | Bash (.sh) | `scripts/unix/` |
+| **Windows** | PowerShell (.ps1) | `scripts/windows/` |
+
 ## 📁 İçerik
 
 ### 🔐 Test Sertifikaları ile Başlatma
 
-| Script | Açıklama |
-|--------|----------|
-| `quick-start-with-test-certs.sh` | İnteraktif sertifika seçimi ve otomatik başlatma |
-| `start-test1.sh` | Test Sertifikası 1 ile direkt başlatma |
-| `start-test2.sh` | Test Sertifikası 2 ile direkt başlatma |
-| `start-test3.sh` | Test Sertifikası 3 ile direkt başlatma |
-
-### 🧪 Test Scripts
+#### Unix/Linux/macOS
 
 | Script | Açıklama |
 |--------|----------|
-| `test-with-bundled-certs.sh` | Tüm API endpoint'lerini otomatik test eder |
+| `unix/quick-start-with-test-certs.sh` | İnteraktif sertifika seçimi ve otomatik başlatma |
+| `unix/start-test1.sh` | Test Sertifikası 1 ile direkt başlatma |
+| `unix/start-test2.sh` | Test Sertifikası 2 ile direkt başlatma |
+| `unix/start-test3.sh` | Test Sertifikası 3 ile direkt başlatma |
+| `unix/test-with-bundled-certs.sh` | Tüm API endpoint'lerini otomatik test eder |
+
+#### Windows
+
+| Script | Açıklama |
+|--------|----------|
+| `windows/quick-start-with-test-certs.ps1` | İnteraktif başlatma |
+| `windows/start-test1.ps1` | Test Sertifikası 1 |
+| `windows/start-test2.ps1` | Test Sertifikası 2 |
+| `windows/start-test3.ps1` | Test Sertifikası 3 |
 
 ### 🚀 Diğer
 
@@ -27,36 +61,33 @@ Bu klasörde Sign API için yardımcı script'ler bulunmaktadır.
 
 ## 🚀 Hızlı Kullanım
 
-### İnteraktif Başlatma (Önerilen)
-
-En basit yol - size sertifika seçtirip otomatik başlatır:
+### Unix/Linux/macOS
 
 ```bash
-./scripts/quick-start-with-test-certs.sh
+# İnteraktif başlatma (önerilen)
+./scripts/unix/quick-start-with-test-certs.sh
+
+# Direkt başlatma
+./scripts/unix/start-test1.sh
+./scripts/unix/start-test2.sh
+./scripts/unix/start-test3.sh
+
+# API testleri
+./scripts/unix/test-with-bundled-certs.sh
 ```
 
-### Direkt Başlatma
+### Windows (PowerShell)
 
-Belirli bir sertifika ile direkt başlatmak için:
+```powershell
+# İnteraktif başlatma (önerilen)
+.\scripts\windows\quick-start-with-test-certs.ps1
 
-```bash
-# Sertifika 1
-./scripts/start-test1.sh
-
-# Sertifika 2
-./scripts/start-test2.sh
-
-# Sertifika 3
-./scripts/start-test3.sh
+# Direkt başlatma
+.\scripts\windows\start-test1.ps1
+.\scripts\windows\start-test2.ps1
+.\scripts\windows\start-test3.ps1
 ```
 
-### API Testleri
-
-API'yi başlattıktan sonra tüm endpoint'leri test etmek için:
-
-```bash
-./scripts/test-with-bundled-certs.sh
-```
 
 ## 📖 Test Sertifikaları
 

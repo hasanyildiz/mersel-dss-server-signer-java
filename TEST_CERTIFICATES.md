@@ -24,13 +24,20 @@ Repo içinde aşağıdaki test sertifikaları bulunmaktadır:
 
 ## 🚀 Hızlı Başlatma
 
-### Yöntem 1: İnteraktif Script (Önerilen)
 
+### Yöntem 1: İnteraktif Script
+
+**Unix/Linux/macOS:**
 ```bash
-./scripts/quick-start-with-test-certs.sh
+./scripts/unix/quick-start-with-test-certs.sh
 ```
 
-Bu script:
+**Windows (PowerShell):**
+```powershell
+.\scripts\windows\quick-start-with-test-certs.ps1
+```
+
+Bu script'ler:
 - ✅ Sertifika seçimi yapmanızı sağlar
 - ✅ Otomatik olarak environment variables'ları ayarlar
 - ✅ İsteğe bağlı TÜBİTAK timestamp yapılandırması sunar

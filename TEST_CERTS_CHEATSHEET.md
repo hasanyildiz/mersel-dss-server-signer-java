@@ -7,23 +7,28 @@
 
 ## 📋 Hızlı Komutlar
 
-### Tek Komutla Başlat (İnteraktif)
+### Unix/Linux/macOS
 
 ```bash
-./scripts/quick-start-with-test-certs.sh
+# İnteraktif
+./scripts/unix/quick-start-with-test-certs.sh
+
+# Direkt başlatma
+./scripts/unix/start-test1.sh
+./scripts/unix/start-test2.sh
+./scripts/unix/start-test3.sh
 ```
 
-### Direkt Başlatma (Sertifika Seçerek)
+### Windows (PowerShell)
 
-```bash
-# Test Sertifikası 1
-./scripts/start-test1.sh
+```powershell
+# İnteraktif
+.\scripts\windows\quick-start-with-test-certs.ps1
 
-# Test Sertifikası 2
-./scripts/start-test2.sh
-
-# Test Sertifikası 3
-./scripts/start-test3.sh
+# Direkt başlatma
+.\scripts\windows\start-test1.ps1
+.\scripts\windows\start-test2.ps1
+.\scripts\windows\start-test3.ps1
 ```
 
 ### Manuel Başlatma
