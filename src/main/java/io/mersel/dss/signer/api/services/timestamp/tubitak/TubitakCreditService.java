@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 /**
- * TÜBİTAK E-SYA zaman damgası kontör sorgulama servisi.
+ * TÜBİTAK ESYA zaman damgası kontör sorgulama servisi.
  */
 @Service
 public class TubitakCreditService {

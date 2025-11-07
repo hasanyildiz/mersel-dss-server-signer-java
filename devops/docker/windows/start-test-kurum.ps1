@@ -82,9 +82,6 @@ TUBITAK_PASSWORD=password$KurumNo
 SERVER_PORT=8085
 SPRING_PROFILES_ACTIVE=prod
 
-# Tubitak Zaman Damgasi
-TUBITAK_TIMESTAMP_URL=http://zd.kamusm.gov.tr
-
 # Monitoring
 PROMETHEUS_PORT=9090
 GRAFANA_PORT=3000

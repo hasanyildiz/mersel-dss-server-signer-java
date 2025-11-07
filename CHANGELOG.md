@@ -9,6 +9,62 @@ ve bu proje [Semantic Versioning](https://semver.org/spec/v2.0.0.html) kullanmak
 
 ### Added
 
+- ⏰ **RFC 3161 Zaman Damgası (Timestamp) Servisi** - Binary belgelere zaman damgası ekleme ve doğrulama
+  - **Timestamp Alma Endpoint** (`POST /api/timestamp/get`)
+    - Herhangi bir binary dosya için RFC 3161 uyumlu timestamp
+    - Multipart/form-data ile dosya yükleme
+    - Binary response (application/octet-stream) - direkt .tst dosyası
+    - Metadata HTTP header'larında (`X-Timestamp-*`)
+    - Çoklu hash algoritması desteği (SHA256, SHA384, SHA512)
+    - TÜBİTAK ESYA ve standart TSP sunucuları desteği
+  - **Timestamp Doğrulama Endpoint** (`POST /api/timestamp/validate`)
+    - Timestamp token'ın yapısal doğrulaması
+    - TSA sertifika kontrolü ve geçerlilik doğrulaması
+    - Orijinal belge ile hash eşleşme kontrolü (opsiyonel)
+    - Detaylı validation raporu
+    - Sertifika geçerlilik tarihi kontrolü
+  - **Servis Durumu Endpoint** (`GET /api/timestamp/status`)
+    - TSP sunucu yapılandırma kontrolü
+    - Servis hazır olma durumu
+  - **Teknik Özellikler**
+    - DSS (Digital Signature Service) 6.3 entegrasyonu
+    - BouncyCastle TSP implementasyonu
+    - Hybrid parsing yaklaşımı (TimeStampResponse + CMSSignedData)
+    - Robust error handling
+    - Comprehensive logging
+  - **DTO'lar**
+    - `TimestampRequestDto` - Timestamp alma talebi (deprecated, geriye dönük uyumluluk)
+    - `TimestampResponseDto` - Internal use için metadata
+    - `TimestampValidationDto` - Validation talebi (deprecated, geriye dönük uyumluluk)
+    - `TimestampValidationResponseDto` - Detaylı validation sonucu
+  - **Servisler**
+    - `TimestampService` - Core timestamp işlemleri
+    - `TimestampConfigurationService` - TSP sunucu yapılandırması (mevcut)
+    - `TimestampController` - REST API endpoints
+  - **Dokümantasyon**
+    - `docs/TIMESTAMP.md` - 388 satır kapsamlı dokümantasyon
+    - Bash/cURL örnekleri
+    - Python client örneği
+    - Java client örneği
+    - Kullanım senaryoları ve SSS
+  - **Test Coverage**
+    - `TimestampServiceTest` - 11 unit test
+    - `TimestampControllerTest` - 11 unit test
+    - `examples/curl/timestamp-example.sh` - 9 senaryo ile entegrasyon test script'i
+  - **Özellikler**
+    - ✅ RFC 3161 tam uyumluluk
+    - ✅ Binary response ile %25 bandwidth tasarrufu
+    - ✅ Metadata HTTP header'larda (RESTful)
+    - ✅ Browser'da direkt dosya indirme
+    - ✅ Multipart/form-data (diğer endpoint'lerle tutarlı)
+    - ✅ TÜBİTAK ESYA özel authentication desteği
+    - ✅ KAMUSM timestamp sunucusu desteği
+    - ✅ E-Tugra ve diğer RFC 3161 sunucuları desteği
+    - ✅ Swagger/OpenAPI 3.0 entegrasyonu
+    - ✅ Hash verification
+    - ✅ Certificate validation
+    - ✅ Nonce support
+
 - 🐳 **Docker & Docker Compose Desteği** - Production-ready containerization
   - **Dockerfile** - Multi-stage build (Maven build + JRE runtime)
     - Eclipse Temurin 8 JRE (AdoptOpenJDK resmi devamı)

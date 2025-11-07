@@ -18,7 +18,7 @@ import java.security.SecureRandom;
 import java.security.spec.KeySpec;
 
 /**
- * TÜBİTAK E-SYA Zaman Damgası servisi için kimlik doğrulama yardımcı sınıfı.
+ * TÜBİTAK ESYA Zaman Damgası servisi için kimlik doğrulama yardımcı sınıfı.
  * <p>
  * TÜBİTAK zaman damgası sunucusunun gerektirdiği özel kimlik doğrulama
  * mekanizmasını uygular. Müşteri kimlik bilgileri ve timestamp verisi

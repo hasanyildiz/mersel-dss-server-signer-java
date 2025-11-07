@@ -1,10 +1,10 @@
-# TÜBİTAK E-SYA Zaman Damgası Entegrasyonu
+# TÜBİTAK ESYA Zaman Damgası Entegrasyonu
 
-Bu dokümantasyon, Sign API'ye eklenen TÜBİTAK E-SYA zaman damgası sunucusu desteğini açıklar.
+Bu dokümantasyon, Sign API'ye eklenen TÜBİTAK ESYA zaman damgası sunucusu desteğini açıklar.
 
 ## Genel Bakış
 
-TÜBİTAK E-SYA zaman damgası sunucusu, standart RFC 3161 protokolüne ek olarak özel bir kimlik doğrulama mekanizması kullanır. Bu implementasyon, TÜBİTAK'ın sunucu spesifikasyonlarına uygun olarak geliştirilmiştir.
+TÜBİTAK ESYA zaman damgası sunucusu, standart RFC 3161 protokolüne ek olarak özel bir kimlik doğrulama mekanizması kullanır. Bu implementasyon, TÜBİTAK'ın sunucu spesifikasyonlarına uygun olarak geliştirilmiştir.
 
 ## Teknik Detaylar
 
@@ -122,7 +122,7 @@ curl -X POST http://localhost:8085/api/xades/sign \
 TÜBİTAK modunun aktif olduğunu doğrulamak için loglara bakın:
 
 ```
-INFO  - TÜBİTAK E-SYA zaman damgası modu etkin
+INFO  - TÜBİTAK ESYA zaman damgası modu etkin
 INFO  - TÜBİTAK kimlik doğrulaması yapılandırıldı. Müşteri ID: 123456
 INFO  - Timestamp sunucusu başarıyla yapılandırıldı: http://zd.kamusm.gov.tr/ (TÜBİTAK: true)
 ```
@@ -165,7 +165,7 @@ Bu uyarı alınırsa:
 ## Değişiklik Geçmişi
 
 ### v1.0 (2025-11-07)
-- TÜBİTAK E-SYA zaman damgası desteği eklendi
+- TÜBİTAK ESYA zaman damgası desteği eklendi
 - Özel kimlik doğrulama mekanizması implementasyonu
 - TubitakAuthenticationHelper - Kriptografik işlemler
 - TubitakTimestampDataLoader - HTTP DataLoader

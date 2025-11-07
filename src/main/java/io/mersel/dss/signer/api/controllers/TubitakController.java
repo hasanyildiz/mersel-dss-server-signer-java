@@ -19,11 +19,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * TÜBİTAK E-SYA zaman damgası servisi için özel işlemler.
+ * TÜBİTAK ESYA zaman damgası servisi için özel işlemler.
  */
 @RestController
 @RequestMapping("/api/tubitak")
-@Tag(name = "TÜBİTAK", description = "TÜBİTAK E-SYA zaman damgası servisi işlemleri")
+@Tag(name = "TÜBİTAK", description = "TÜBİTAK ESYA zaman damgası servisi işlemleri")
 public class TubitakController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TubitakController.class);
@@ -36,7 +36,7 @@ public class TubitakController {
 
     @Operation(
         summary = "TÜBİTAK zaman damgası kontör bilgisini sorgular",
-        description = "TÜBİTAK E-SYA zaman damgası servisi için kalan kontör miktarını döndürür. " +
+        description = "TÜBİTAK ESYA zaman damgası servisi için kalan kontör miktarını döndürür. " +
                      "Bu endpoint sadece IS_TUBITAK_TSP=true olarak yapılandırılmışsa kullanılabilir."
     )
     @ApiResponses({

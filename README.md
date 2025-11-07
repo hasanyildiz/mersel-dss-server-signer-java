@@ -33,6 +33,13 @@ Türkiye e-imza standartlarına uygun elektronik imza (XAdES, PAdES, WS-Security
   - Zaman damgası entegrasyonu
   - Binary Security Token
 
+- **Zaman Damgası (Timestamp) - RFC 3161**
+  - Herhangi bir binary belge için zaman damgası alma
+  - TSQ (Time Stamp Query) ve TSR (Time Stamp Response)
+  - Kapsamlı zaman damgası doğrulama
+  - TÜBİTAK ESYA ve standart TSP sunucuları desteği
+  - Çoklu hash algoritması desteği (SHA-256, SHA-384, SHA-512, SHA3-*)
+
 ### Temel Yetenekler
 
 ✅ **Donanım Güvenlik Modülü (HSM) Desteği**
@@ -128,7 +135,7 @@ TS_SERVER_HOST=http://zd.kamusm.gov.tr
 TS_USER_ID=kullanici-adi
 TS_USER_PASSWORD=sifre
 
-# TÜBİTAK E-SYA Zaman Damgası (Özel kimlik doğrulama)
+# TÜBİTAK ESYA Zaman Damgası (Özel kimlik doğrulama)
 IS_TUBITAK_TSP=true  # TÜBİTAK modunu aktif eder
 
 # Performans
@@ -160,8 +167,14 @@ API `http://localhost:8085` adresinde erişilebilir olacaktır.
 - WS-Security Signature: `POST /v1/wssecuritysign`
 - TÜBİTAK Credit: `GET /api/tubitak/credit`
 
+**Zaman Damgası Endpoint'leri:**
+- Timestamp Alma: `POST /api/timestamp/get`
+- Timestamp Doğrulama: `POST /api/timestamp/validate`
+- Servis Durumu: `GET /api/timestamp/status`
+
 > 📘 Actuator: [docs/ACTUATOR_ENDPOINTS.md](docs/ACTUATOR_ENDPOINTS.md)  
-> 📊 Monitoring: [docs/MONITORING.md](docs/MONITORING.md) - Prometheus & Grafana (Dashboard ID: **11378**)
+> 📊 Monitoring: [docs/MONITORING.md](docs/MONITORING.md) - Prometheus & Grafana (Dashboard ID: **11378**)  
+> ⏰ Timestamp: [docs/TIMESTAMP.md](docs/TIMESTAMP.md) - RFC 3161 Zaman Damgası Servisi
 
 ## Kullanım Örnekleri
 
@@ -194,6 +207,29 @@ curl -X POST http://localhost:8085/v1/wssecuritysign \
   -F "soap1Dot2=false" \
   -o imzali-soap.xml
 ```
+
+### Zaman Damgası (Timestamp)
+
+```bash
+# Dosya için zaman damgası al - binary (.tst) döner
+curl -X POST http://localhost:8080/api/timestamp/get \
+  -F "document=@document.pdf" \
+  -F "hashAlgorithm=SHA256" \
+  -o timestamp.tst
+
+# Metadata header'larda gelir
+curl -X POST http://localhost:8080/api/timestamp/get \
+  -F "document=@document.pdf" \
+  -i | grep "X-Timestamp"
+
+# Zaman damgasını doğrula (orijinal dosya ile)
+curl -X POST http://localhost:8080/api/timestamp/validate \
+  -F "timestampToken=@timestamp.tst" \
+  -F "originalDocument=@document.pdf"
+```
+
+> 📖 Detaylı kullanım ve örnekler için: [docs/TIMESTAMP.md](docs/TIMESTAMP.md)  
+> 🔧 Çalıştırılabilir örnekler: [examples/curl/timestamp-example.sh](examples/curl/timestamp-example.sh)
 
 ## Mimari
 
@@ -284,7 +320,7 @@ Bu proje standart Java konvansiyonlarını takip eder:
 - Dokümantasyon için Javadoc
 - Spring best practices
 
-## TÜBİTAK E-SYA Zaman Damgası
+## TÜBİTAK ESYA Zaman Damgası
 
 TÜBİTAK zaman damgası sunucusu özel kimlik doğrulama kullanır. Kullanmak için:
 

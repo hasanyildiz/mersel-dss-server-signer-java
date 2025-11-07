@@ -1,119 +1,69 @@
 # cURL Örnekleri
 
-Bu dizinde Sign API'yi test etmek için basit cURL script'leri bulunmaktadır.
+Bu dizinde API'yi test etmek için kullanabileceğiniz cURL script örnekleri bulunur.
 
-## 🎯 Hızlı Test (Hazır Sertifikalarla)
+## Mevcut Örnekler
 
-Repo içindeki test sertifikaları ile otomatik test:
+### İmzalama Örnekleri
 
-```bash
-# API'yi başlat (başka bir terminalde)
-../../scripts/quick-start-with-test-certs.sh
+- **sign-pdf.sh** - PDF belgeleri için PAdES imzası
+- **sign-efatura.sh** - e-Fatura için XAdES imzası
+- **sign-soap.sh** - SOAP envelope için WS-Security imzası
+- **check-tubitak-credit.sh** - TÜBİTAK ESYA kontör sorgulaması
 
-# Tüm endpoint'leri otomatik test et
-../../scripts/test-with-bundled-certs.sh
-```
+### Zaman Damgası Örnekleri
 
-**Detaylı bilgi:** [../../TEST_CERTIFICATES.md](../../TEST_CERTIFICATES.md)
-
-## Gereksinimler
-
-- bash
-- curl
-- jq (opsiyonel, JSON formatlamak için)
+- **timestamp-example.sh** - RFC 3161 zaman damgası alma ve doğrulama örnekleri
+  - Servis durumu kontrolü
+  - Basit metin için timestamp alma
+  - Dosya için timestamp alma
+  - Timestamp doğrulama (orijinal veri ile)
+  - Timestamp doğrulama (sadece token ile)
+  - Farklı hash algoritmaları ile test
+  - Hata senaryoları
 
 ## Kullanım
 
-### 1. e-Fatura İmzalama
-
-```bash
-# Varsayılan dosya (efatura.xml)
-./sign-efatura.sh
-
-# Özel dosya
-./sign-efatura.sh my-invoice.xml
-
-# Özel çıktı dosyası
-./sign-efatura.sh my-invoice.xml signed-output.xml
-```
-
-### 2. PDF İmzalama
-
-```bash
-# Normal mod (yeni imza)
-./sign-pdf.sh document.pdf
-
-# Append mode (varolan imzaları koru)
-./sign-pdf.sh document.pdf true
-```
-
-### 3. SOAP İmzalama
-
-```bash
-# SOAP 1.1
-./sign-soap.sh soap-request.xml
-
-# SOAP 1.2
-./sign-soap.sh soap-request.xml true
-```
-
-### 4. TÜBİTAK Kontör Sorgulama
-
-```bash
-./check-tubitak-credit.sh
-```
-
-## Environment Variables
-
-API URL'sini değiştirmek için:
-
-```bash
-export API_URL=http://your-server:8085
-./sign-efatura.sh
-```
-
-## Script İzinleri
-
-Script'leri çalıştırılabilir yapmak için:
+Script'leri çalıştırmadan önce çalıştırma izni verin:
 
 ```bash
 chmod +x *.sh
 ```
 
-## Toplu Test
-
-Tüm işlevleri test etmek için:
+### Zaman Damgası Örneğini Çalıştırma
 
 ```bash
-# Test dosyaları oluştur
-echo '<?xml version="1.0"?><test>data</test>' > test.xml
-echo 'test' > test.txt
-
-# İmzalama testleri
-./sign-efatura.sh test.xml
-./sign-soap.sh test.xml
-
-# Kontör kontrolü (TÜBİTAK TSP aktifse)
-./check-tubitak-credit.sh
+# Timestamp servisini test et
+./timestamp-example.sh
 ```
 
-## Hata Giderme
+Script otomatik olarak:
+1. ✅ Servis durumunu kontrol eder
+2. ✅ Metin için timestamp alır
+3. ✅ Timestamp'i doğrular
+4. ✅ Farklı senaryoları test eder
+5. ✅ Sonuçları renkli çıktı ile gösterir
 
-### "Connection refused"
-API sunucusunun çalıştığından emin olun:
+### Gereksinimler
+
+Tüm script'ler için:
+- `curl` - API çağrıları için
+- `jq` - JSON parsing için
+- Çalışan bir servis instance'ı (varsayılan: http://localhost:8080)
+
+Timestamp script'i için ek olarak:
+- Yapılandırılmış TS_SERVER_HOST ortam değişkeni
+
+## Yapılandırma
+
+Servislerin farklı bir URL'de çalıştığı durumda, script içindeki BASE_URL değişkenini değiştirin:
+
 ```bash
-curl http://localhost:8085/swagger/index.html
+BASE_URL="http://your-server:8080"
 ```
 
-### "File not found"
-Dosya yolunu kontrol edin:
-```bash
-ls -la efatura.xml
-```
+## Daha Fazla Bilgi
 
-### "HTTP 500"
-API loglarını kontrol edin:
-```bash
-tail -f logs/error.log
-```
-
+- [Timestamp Dokümantasyonu](../../docs/TIMESTAMP.md)
+- [API Dokümantasyonu](../../README.md)
+- [Swagger UI](http://localhost:8080/swagger/index.html)

@@ -15,7 +15,7 @@ import java.net.URI;
 /**
  * Zaman damgası sunucularını yapılandıran ve yöneten servis.
  * <p>
- * Standart RFC 3161 TSP sunucularının yanı sıra TÜBİTAK E-SYA
+ * Standart RFC 3161 TSP sunucularının yanı sıra TÜBİTAK ESYA
  * zaman damgası sunucusunu da destekler.
  */
 @Service

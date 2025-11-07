@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * TÜBİTAK E-SYA Zaman Damgası servisi için özelleştirilmiş DataLoader.
+ * TÜBİTAK ESYA Zaman Damgası servisi için özelleştirilmiş DataLoader.
  * <p>
  * Timestamp request'lerine TÜBİTAK'ın gerektirdiği kimlik doğrulama
  * bilgilerini otomatik olarak ekler.
