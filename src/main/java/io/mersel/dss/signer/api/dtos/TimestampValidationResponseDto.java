@@ -29,10 +29,16 @@ public class TimestampValidationResponseDto {
     private String tsaName;
 
     @Schema(
-        description = "Kullanılan hash algoritması",
-        example = "SHA256"
+        description = "Kullanılan hash algoritması (human-readable)",
+        example = "SHA-256"
     )
     private String hashAlgorithm;
+
+    @Schema(
+        description = "Hash algoritması OID",
+        example = "2.16.840.1.101.3.4.2.1"
+    )
+    private String hashAlgorithmOid;
 
     @Schema(
         description = "Seri numarası",
@@ -47,10 +53,16 @@ public class TimestampValidationResponseDto {
     private String nonce;
 
     @Schema(
-        description = "İmza algoritması",
-        example = "SHA256withRSA"
+        description = "İmza algoritması (human-readable)",
+        example = "SHA-512 with RSA"
     )
     private String signatureAlgorithm;
+
+    @Schema(
+        description = "İmza algoritması OID",
+        example = "1.2.840.113549.1.1.13"
+    )
+    private String signatureAlgorithmOid;
 
     @Schema(
         description = "TSA sertifikası (Base64 kodlu PEM formatında)"
@@ -124,6 +136,14 @@ public class TimestampValidationResponseDto {
         this.hashAlgorithm = hashAlgorithm;
     }
 
+    public String getHashAlgorithmOid() {
+        return hashAlgorithmOid;
+    }
+
+    public void setHashAlgorithmOid(String hashAlgorithmOid) {
+        this.hashAlgorithmOid = hashAlgorithmOid;
+    }
+
     public String getSerialNumber() {
         return serialNumber;
     }
@@ -146,6 +166,14 @@ public class TimestampValidationResponseDto {
 
     public void setSignatureAlgorithm(String signatureAlgorithm) {
         this.signatureAlgorithm = signatureAlgorithm;
+    }
+
+    public String getSignatureAlgorithmOid() {
+        return signatureAlgorithmOid;
+    }
+
+    public void setSignatureAlgorithmOid(String signatureAlgorithmOid) {
+        this.signatureAlgorithmOid = signatureAlgorithmOid;
     }
 
     public String getTsaCertificate() {

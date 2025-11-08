@@ -27,6 +27,7 @@ import java.util.Map;
  * RFC 3161 standardına uygun TSQ, TSR ve validasyon endpoint'leri sağlar.
  */
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS})
 @RequestMapping("/api/timestamp")
 @Tag(name = "Timestamp", description = "Zaman damgası (RFC 3161) işlemleri - TSQ, TSR ve doğrulama")
 public class TimestampController {
@@ -187,6 +188,7 @@ public class TimestampController {
 
             // Timestamp token'ı byte array'e çevir
             byte[] tokenBytes = timestampToken.getBytes();
+            LOGGER.debug("Timestamp token okundu - boyut: {} bytes", tokenBytes.length);
             
             // Orijinal belge varsa byte array'e çevir
             byte[] originalBytes = null;

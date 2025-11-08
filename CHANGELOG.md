@@ -9,6 +9,37 @@ ve bu proje [Semantic Versioning](https://semver.org/spec/v2.0.0.html) kullanmak
 
 ### Added
 
+- 🔐 **Sertifika Listeleme API'si** - Keystore sertifikalarını görüntüleme ve bilgi alma
+  - **Sertifika Listesi Endpoint** (`GET /api/certificates/list`)
+    - PKCS#11 ve PFX keystore'larından tüm sertifikaları listeler
+    - Detaylı sertifika bilgileri (alias, serial, subject, issuer, geçerlilik tarihleri)
+    - Key usage ve extended key usage bilgileri
+    - Certificate policies ve CPS URL'leri
+    - Private key varlık kontrolü
+    - JSON formatında yapılandırılmış yanıt
+  - **Keystore Bilgileri Endpoint** (`GET /api/certificates/info`)
+    - Yapılandırılmış keystore tipi ve parametreleri
+    - PKCS#11 library path ve slot bilgisi
+    - PFX dosya yolu bilgisi
+    - Seçili sertifika alias ve serial number
+  - **Swagger/OpenAPI entegrasyonu**
+    - Detaylı endpoint dokümantasyonu
+    - Response şemaları ve örnekler
+
+### Changed
+
+- 🌐 **CORS Yapılandırması İyileştirildi**
+  - Timestamp header'ları CORS exposed headers'a eklendi
+    - `X-Timestamp-Time` - Zaman damgası zamanı
+    - `X-Timestamp-TSA` - TSA (Time Stamp Authority) bilgisi
+    - `X-Timestamp-Serial` - Seri numarası
+    - `X-Timestamp-Hash-Algorithm` - Kullanılan hash algoritması
+  - `Content-Disposition` header'ı exposed edildi (dosya indirmeleri için)
+  - `x-signature-value` header'ı exposed edildi (imza değeri için)
+  - CORS configuration daha temiz ve maintainable
+
+### Previous Changes
+
 - 🎨 **Scalar API Documentation** - Modern ve kullanıcı dostu API dokümantasyon arayüzü
   - Swagger UI yerine Scalar kullanımı
   - Dark mode ve modern tasarım

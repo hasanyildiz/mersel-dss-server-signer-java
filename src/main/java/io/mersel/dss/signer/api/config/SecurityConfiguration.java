@@ -1,16 +1,10 @@
 package io.mersel.dss.signer.api.config;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
-import java.util.Arrays;
-import java.util.Collections;
 
 /**
  * Web güvenlik yapılandırması.
@@ -40,53 +34,25 @@ public class SecurityConfiguration implements WebMvcConfigurer {
     }
 
     /**
-     * CORS yapılandırması.
-     * 
-     * Production ortamında allowed-origins değerini spesifik domain'lerle
-     * sınırlandırmanız önerilir.
+     * CORS mapping configuration.
      */
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        
-        // Allowed origins - production'da spesifik domain'ler kullanılmalı
-        if ("*".equals(allowedOrigins)) {
-            configuration.addAllowedOriginPattern("*");
-        } else {
-            configuration.setAllowedOrigins(Arrays.asList(allowedOrigins.split(",")));
-        }
-        
-        // Allowed HTTP methods
-        configuration.setAllowedMethods(Arrays.asList(allowedMethods.split(",")));
-        
-        // Allowed headers
-        configuration.setAllowedHeaders(Arrays.asList(
-            "Authorization",
-            "Content-Type",
-            "X-Requested-With",
-            "Accept",
-            "Origin",
-            "Access-Control-Request-Method",
-            "Access-Control-Request-Headers",
-            "X-API-Key"
-        ));
-        
-        // Exposed headers - client tarafından okunabilir
-        configuration.setExposedHeaders(Arrays.asList(
-            "x-signature-value",
-            "Content-Disposition"
-        ));
-        
-        // Credentials
-        configuration.setAllowCredentials(true);
-        
-        // Max age
-        configuration.setMaxAge(maxAge);
-        
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        
-        return source;
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**")
+                .allowedOriginPatterns("*")
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "PATCH")
+                .allowedHeaders("*")
+                .exposedHeaders(
+                    "x-signature-value",
+                    "Content-Disposition",
+                    "X-Timestamp-Time",
+                    "X-Timestamp-TSA",
+                    "X-Timestamp-Serial",
+                    "X-Timestamp-Hash-Algorithm"
+                )
+                .allowCredentials(false)
+                .maxAge(3600);
     }
+
 }
 

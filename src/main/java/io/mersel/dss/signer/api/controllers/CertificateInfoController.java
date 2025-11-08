@@ -7,7 +7,6 @@ import io.mersel.dss.signer.api.services.keystore.KeyStoreProvider;
 import io.mersel.dss.signer.api.services.keystore.PKCS11KeyStoreProvider;
 import io.mersel.dss.signer.api.services.keystore.PfxKeyStoreProvider;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -29,6 +28,7 @@ import java.util.Map;
  * PKCS#11 veya PFX keystore'dan sertifika alias ve serial number bilgilerini almak için kullanılır.
  */
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS})
 @RequestMapping("/api/certificates")
 @Tag(name = "Certificate Info", description = "Keystore sertifika bilgileri API'si")
 public class CertificateInfoController {

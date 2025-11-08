@@ -11,10 +11,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.w3c.dom.Document;
 
@@ -34,6 +34,7 @@ import io.mersel.dss.signer.api.models.enums.DocumentType;
  * XML belge imzalama ve WS-Security SOAP zarf imzalama işlemlerini yönetir.
  */
 @RestController
+@CrossOrigin(origins = "*", allowedHeaders = "*", methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS})
 public class XadesController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(XadesController.class);

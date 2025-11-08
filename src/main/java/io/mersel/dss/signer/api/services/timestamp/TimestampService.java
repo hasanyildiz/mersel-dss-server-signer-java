@@ -1,19 +1,17 @@
 package io.mersel.dss.signer.api.services.timestamp;
 
 import eu.europa.esig.dss.enumerations.DigestAlgorithm;
-import eu.europa.esig.dss.enumerations.TimestampType;
+import eu.europa.esig.dss.enumerations.EncryptionAlgorithm;
+import eu.europa.esig.dss.enumerations.SignatureAlgorithm;
 import eu.europa.esig.dss.model.TimestampBinary;
 import eu.europa.esig.dss.service.tsp.OnlineTSPSource;
-import eu.europa.esig.dss.spi.x509.tsp.TimestampToken;
 import io.mersel.dss.signer.api.dtos.TimestampRequestDto;
 import io.mersel.dss.signer.api.dtos.TimestampResponseDto;
 import io.mersel.dss.signer.api.dtos.TimestampValidationDto;
 import io.mersel.dss.signer.api.dtos.TimestampValidationResponseDto;
 import io.mersel.dss.signer.api.exceptions.TimestampException;
 import org.bouncycastle.cert.X509CertificateHolder;
-import org.bouncycastle.cms.CMSException;
 import org.bouncycastle.cms.CMSSignedData;
-import org.bouncycastle.tsp.TSPException;
 import org.bouncycastle.tsp.TimeStampResponse;
 import org.bouncycastle.util.Store;
 import org.slf4j.Logger;
@@ -21,8 +19,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
 import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -112,7 +108,6 @@ public class TimestampService {
             }
             
             LOGGER.info("Zaman damgası başarıyla alındı. Tarih: {}", response.getTimestamp());
-            
             return response;
 
         } catch (Exception e) {
@@ -177,9 +172,65 @@ public class TimestampService {
             
             // Temel bilgileri doldur (BouncyCastle token'dan)
             response.setTimestamp(ISO_DATE_FORMAT.format(bcToken.getTimeStampInfo().getGenTime()));
-            response.setHashAlgorithm(bcToken.getTimeStampInfo().getHashAlgorithm().getAlgorithm().getId());
+            
+            // Hash algoritmasını hem isim hem OID olarak set et
+            String hashAlgOid = bcToken.getTimeStampInfo().getHashAlgorithm().getAlgorithm().getId();
+            response.setHashAlgorithmOid(hashAlgOid);
+            try {
+                DigestAlgorithm digestAlg = DigestAlgorithm.forOID(hashAlgOid);
+                response.setHashAlgorithm(digestAlg.getName());
+            } catch (Exception e) {
+                LOGGER.debug("Hash algoritması DSS'de bulunamadı, OID kullanılıyor: {}", hashAlgOid);
+                response.setHashAlgorithm(hashAlgOid);
+            }
+            
             response.setSerialNumber(bcToken.getTimeStampInfo().getSerialNumber().toString());
-            response.setSignatureAlgorithm(bcToken.getTimeStampInfo().getMessageImprintAlgOID().getId());
+            
+            // İmza algoritmasını hem isim hem OID olarak set et
+            try {
+                CMSSignedData signedData = bcToken.toCMSSignedData();
+                if (signedData.getSignerInfos().size() > 0) {
+                    org.bouncycastle.cms.SignerInformation signerInfo = 
+                        (org.bouncycastle.cms.SignerInformation) signedData.getSignerInfos().getSigners().iterator().next();
+                    
+                    String digestOid = signerInfo.getDigestAlgOID();
+                    String encryptionOid = signerInfo.getEncryptionAlgOID();
+                    LOGGER.debug("İmza algoritması OID'leri: digest={}, encryption={}", digestOid, encryptionOid);
+                    
+                    response.setSignatureAlgorithmOid(encryptionOid);
+                    
+                    // Önce encryptionOid'yi direkt SignatureAlgorithm olarak dene
+                    try {
+                        SignatureAlgorithm sigAlg = SignatureAlgorithm.forOID(encryptionOid);
+                        String algName = sigAlg.name().replace("_", " with ");
+                        response.setSignatureAlgorithm(algName);
+                        LOGGER.debug("İmza algoritması bulundu: {}", algName);
+                    } catch (Exception ex) {
+                        // SignatureAlgorithm kombinasyonunu oluştur
+                        try {
+                            DigestAlgorithm digestAlg = DigestAlgorithm.forOID(digestOid);
+                            EncryptionAlgorithm encAlg = EncryptionAlgorithm.forOID(encryptionOid);
+                            SignatureAlgorithm sigAlg = SignatureAlgorithm.getAlgorithm(encAlg, digestAlg);
+                            String algName = sigAlg.name().replace("_", " with ");
+                            response.setSignatureAlgorithm(algName);
+                            LOGGER.debug("İmza algoritması kombinasyonu oluşturuldu: {}", algName);
+                        } catch (Exception ex2) {
+                            // Fallback: Manuel isim oluştur
+                            try {
+                                DigestAlgorithm digestAlg = DigestAlgorithm.forOID(digestOid);
+                                EncryptionAlgorithm encAlg = EncryptionAlgorithm.forOID(encryptionOid);
+                                String algName = digestAlg.getName() + " with " + encAlg.getName();
+                                response.setSignatureAlgorithm(algName);
+                            } catch (Exception ex3) {
+                                LOGGER.debug("İmza algoritması DSS'de bulunamadı, OID kullanılıyor: {}", encryptionOid);
+                                response.setSignatureAlgorithm(encryptionOid);
+                            }
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                LOGGER.warn("İmza algoritması bilgisi alınamadı: {}", e.getMessage());
+            }
             
             if (bcToken.getTimeStampInfo().getNonce() != null) {
                 response.setNonce(bcToken.getTimeStampInfo().getNonce().toString());
@@ -214,8 +265,8 @@ public class TimestampService {
                     byte[] messageImprint = bcToken.getTimeStampInfo().getMessageImprintDigest();
                     
                     // Hash'i hesapla
-                    String hashAlgOid = bcToken.getTimeStampInfo().getMessageImprintAlgOID().getId();
-                    DigestAlgorithm digestAlgorithm = getDigestAlgorithmByOid(hashAlgOid);
+                    String messageImprintOid = bcToken.getTimeStampInfo().getMessageImprintAlgOID().getId();
+                    DigestAlgorithm digestAlgorithm = getDigestAlgorithmByOid(messageImprintOid);
                     byte[] computedHash = computeDigest(originalData, digestAlgorithm);
                     
                     boolean hashMatch = Arrays.equals(messageImprint, computedHash);
@@ -263,8 +314,20 @@ public class TimestampService {
      */
     private org.bouncycastle.tsp.TimeStampToken parseBCTimestampToken(byte[] timestampBytes) {
         try {
-            // Önce TimeStampResponse formatı dene
+            LOGGER.debug("Timestamp token parse ediliyor, boyut: {} bytes", timestampBytes.length);
+            
+            // Direkt TimeStampToken formatı dene (CMSSignedData)
             try {
+                CMSSignedData signedData = new CMSSignedData(timestampBytes);
+                org.bouncycastle.tsp.TimeStampToken token = new org.bouncycastle.tsp.TimeStampToken(signedData);
+                LOGGER.debug("Token CMSSignedData formatında parse edildi");
+                return token;
+            } catch (Exception e) {
+                LOGGER.debug("CMSSignedData formatı değil: {}", e.getMessage());
+            }
+
+             // TimeStampResponse formatı dene
+             try {
                 TimeStampResponse tsResponse = new TimeStampResponse(timestampBytes);
                 org.bouncycastle.tsp.TimeStampToken token = tsResponse.getTimeStampToken();
                 if (token != null) {
@@ -272,19 +335,10 @@ public class TimestampService {
                     return token;
                 }
             } catch (Exception e) {
-                LOGGER.debug("TimeStampResponse formatı değil, direkt token olarak deneniyor: {}", e.getMessage());
+                LOGGER.debug("TimeStampResponse formatı değil: {}", e.getMessage());
             }
             
-            // Direkt TimeStampToken formatı dene (CMSSignedData)
-            try {
-                org.bouncycastle.cms.CMSSignedData signedData = new org.bouncycastle.cms.CMSSignedData(timestampBytes);
-                org.bouncycastle.tsp.TimeStampToken token = new org.bouncycastle.tsp.TimeStampToken(signedData);
-                LOGGER.debug("Token CMSSignedData formatında parse edildi");
-                return token;
-            } catch (Exception e) {
-                LOGGER.warn("BouncyCastle token parse edilemedi: {}", e.getMessage());
-            }
-            
+            LOGGER.warn("Timestamp token formatı tanınamadı");
             return null;
         } catch (Exception e) {
             LOGGER.error("Timestamp token parse hatası", e);

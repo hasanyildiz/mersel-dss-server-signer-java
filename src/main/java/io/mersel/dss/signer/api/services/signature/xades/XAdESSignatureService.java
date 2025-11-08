@@ -28,9 +28,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import java.io.InputStream;
-import java.security.cert.X509Certificate;
 import java.util.Base64;
-import java.util.List;
 import java.util.concurrent.Semaphore;
 
 /**

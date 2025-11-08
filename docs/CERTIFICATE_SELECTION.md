@@ -39,21 +39,47 @@ mvn spring-boot:run
 
 ## 📋 İçindekiler
 
-- [⚡ Quick Start](#-quick-start)
-- [Sertifika Seçim Yöntemleri](#sertifika-seçim-yöntemleri)
-- [Sertifika Bilgilerini Bulma](#sertifika-bilgilerini-bulma)
-  - [Yöntem 1: API'nin Native Özelliği ⭐ (ÖNERİLEN)](#yöntem-1-apinin-native-sertifika-listeleme-özelliği--önerilen)
-  - [Yöntem 2: Shell Script](#yöntem-2-shell-script-alternatif)
-  - [Yöntem 3: Sertifika Görüntüleyici](#yöntem-3-sertifika-görüntüleyici-gui)
-  - [Yöntem 4: API Log Çıktısı](#yöntem-4-api-log-çıktısı)
-- [⚠️ Önemli: Doğru Sertifikayı Seçmek](#️-önemli-doğru-sertifikayı-seçmek)
-  - [Senaryo 1: Mali Mühür (TÜBİTAK)](#-senaryo-1-mali-mühür-sertifikaları-tübitak)
-  - [Senaryo 2: Bireysel E-İmza](#-senaryo-2-bireysel-e-imza-sertifikaları)
-  - [Senaryo 3: Birden Fazla Sertifika](#-senaryo-3-birden-fazla-bireysel-sertifika)
-  - [Hızlı Karar Tablosu](#-hızlı-karar-tablosu)
-- [Öncelik Sırası](#öncelik-sırası)
-- [Hata Ayıklama](#hata-ayıklama)
-- [Best Practices](#best-practices)
+- [🔐 Sertifika Seçimi Rehberi](#-sertifika-seçimi-rehberi)
+  - [⚡ Quick Start](#-quick-start)
+    - [1️⃣ Sertifikalarınızı Listeleyin](#1️⃣-sertifikalarınızı-listeleyin)
+    - [2️⃣ Doğru Sertifikayı Seçin](#2️⃣-doğru-sertifikayı-seçin)
+  - [📋 İçindekiler](#-i̇çindekiler)
+  - [Sertifika Seçim Yöntemleri](#sertifika-seçim-yöntemleri)
+    - [1. ✅ Alias ile Seçim (Önerilen)](#1--alias-ile-seçim-önerilen)
+    - [2. ✅ Serial Number ile Seçim](#2--serial-number-ile-seçim)
+    - [3. ⚠️ Otomatik Seçim (Varsayılan)](#3-️-otomatik-seçim-varsayılan)
+  - [Alias ile Seçim](#alias-ile-seçim)
+    - [PKCS#11 (HSM)](#pkcs11-hsm)
+    - [PFX Dosyası](#pfx-dosyası)
+  - [Serial Number ile Seçim](#serial-number-ile-seçim)
+    - [PKCS#11 (HSM)](#pkcs11-hsm-1)
+    - [PFX Dosyası](#pfx-dosyası-1)
+  - [Sertifika Bilgilerini Bulma](#sertifika-bilgilerini-bulma)
+    - [Yöntem 1: API'nin Native Sertifika Listeleme Özelliği ⭐⭐⭐ (ÖNERİLEN)](#yöntem-1-apinin-native-sertifika-listeleme-özelliği--öneri̇len)
+      - [A) Command-Line Utility (API başlatmadan!)](#a-command-line-utility-api-başlatmadan)
+      - [B) REST API ile (API çalışırken)](#b-rest-api-ile-api-çalışırken)
+      - [✅ Avantajlar](#-avantajlar)
+  - [⚠️ Önemli: Doğru Sertifikayı Seçmek](#️-önemli-doğru-sertifikayı-seçmek)
+    - [📌 Senaryo 1: Mali Mühür Sertifikaları (TÜBİTAK)](#-senaryo-1-mali-mühür-sertifikaları-tübi̇tak)
+    - [📌 Senaryo 2: Bireysel E-İmza Sertifikaları](#-senaryo-2-bireysel-e-i̇mza-sertifikaları)
+    - [📌 Senaryo 3: Birden Fazla Bireysel Sertifika](#-senaryo-3-birden-fazla-bireysel-sertifika)
+    - [🎯 Hızlı Karar Tablosu](#-hızlı-karar-tablosu)
+    - [🔍 Pratik Kontrol](#-pratik-kontrol)
+  - [Öncelik Sırası](#öncelik-sırası)
+    - [Örnek Senaryolar](#örnek-senaryolar)
+      - [Senaryo 1: Sadece Alias Belirtilmiş](#senaryo-1-sadece-alias-belirtilmiş)
+      - [Senaryo 2: Sadece Serial Number Belirtilmiş](#senaryo-2-sadece-serial-number-belirtilmiş)
+      - [Senaryo 3: Her İkisi de Belirtilmiş](#senaryo-3-her-i̇kisi-de-belirtilmiş)
+      - [Senaryo 4: Hiçbiri Belirtilmemiş](#senaryo-4-hiçbiri-belirtilmemiş)
+    - [Serial Number Karşılaştırması](#serial-number-karşılaştırması)
+  - [Hata Ayıklama](#hata-ayıklama)
+    - [Sertifika Bulunamadı Hatası](#sertifika-bulunamadı-hatası)
+    - [Yanlış Sertifika Seçildi](#yanlış-sertifika-seçildi)
+  - [Best Practices](#best-practices)
+    - [✅ Önerilen](#-önerilen)
+    - [❌ Kaçınılması Gerekenler](#-kaçınılması-gerekenler)
+  - [İlgili Dosyalar ve Dokümantasyon](#i̇lgili-dosyalar-ve-dokümantasyon)
+  - [Sorular ve Destek](#sorular-ve-destek)
 
 ---
 
@@ -395,55 +421,6 @@ mvn -q exec:java -Dexec.mainClass="io.mersel.dss.signer.api.SignatureApplication
 ✅ **E-İmza için:** Key Usage'da hem `Digital Signature` hem `Non Repudiation` var mı?  
 ✅ **Geçerlilik:** Valid To tarihi gelecekte mi?  
 ✅ **Private Key:** `Has Private Key: ✅ Yes` olmalı  
-
----
-
-### Yöntem 2: Shell Script (Alternatif)
-
-Proje ile gelen helper script:
-
-```bash
-# PFX için
-./examples/find-certificate-info.sh pfx /path/to/certificate.pfx password
-
-# PKCS#11 için (macOS ARM64'te Java fallback kullanır)
-./examples/find-certificate-info.sh pkcs11 /usr/local/lib/libakisp11.dylib 0 1234
-```
-
-**Not:** Bu script macOS ARM64 sorunlarını otomatik algılar ve Java fallback kullanır.
-
-### Yöntem 3: Sertifika Görüntüleyici (GUI)
-
-**Windows:**
-1. Sertifikaya çift tıklayın → "Ayrıntılar" → "Seri numarası"
-2. Değeri kopyalayın (örnek: `1A2B3C4D5E6F7890`)
-
-**macOS - Keychain Access:**
-1. Sertifikaya çift tıklayın → "Details" → "Serial Number"
-2. Değeri kopyalayın
-
-**Kullanım:**
-```bash
-export CERTIFICATE_SERIAL_NUMBER=1A2B3C4D5E6F7890
-mvn spring-boot:run
-```
-
-### Yöntem 4: API Log Çıktısı
-
-API'yi başlatıp loglardan öğrenin:
-
-```bash
-# Serial number belirtmeden başlatın
-export PKCS11_LIBRARY=/usr/local/lib/libakisp11.dylib
-export PKCS11_SLOT=0
-export CERTIFICATE_PIN=1234
-mvn spring-boot:run
-
-# Log çıktısı:
-# INFO - İmzalama anahtarı bulundu: 1A2B3C4D5E6F7890 (alias: signing-cert-2024)
-```
-
-Ardından API'yi durdurup doğru serial number'ı ayarlayın.
 
 ---
 

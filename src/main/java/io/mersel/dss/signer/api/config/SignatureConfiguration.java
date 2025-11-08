@@ -26,7 +26,7 @@ import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Semaphore;
-import eu.europa.esig.dss.xades.signature.XAdESService;
+
 /**
  * İmza servisleri için ana yapılandırma.
  * Elektronik imza işlemleri için gereken tüm bean'leri ayarlar.
