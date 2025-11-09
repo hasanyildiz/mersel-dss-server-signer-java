@@ -2,31 +2,34 @@ package io.mersel.dss.signer.api.models;
 
 import javax.validation.constraints.NotBlank;
 
+/**
+ * Hata yanıt modeli.
+ * API'den dönen standart hata formatı.
+ */
 public class ErrorModel {
-    private String Code;
-    private String Message;
+    private String code;
+    private String message;
 
     public ErrorModel(String code, String message) {
-        Code = code;
-        Message = message;
+        this.code = code;
+        this.message = message;
     }
 
-
     public String getCode() {
-        return Code;
+        return code;
     }
 
     @NotBlank
     public void setCode(String code) {
-        Code = code;
+        this.code = code;
     }
 
     public String getMessage() {
-        return Message;
+        return message;
     }
 
     @NotBlank
     public void setMessage(String message) {
-        Message = message;
+        this.message = message;
     }
 }

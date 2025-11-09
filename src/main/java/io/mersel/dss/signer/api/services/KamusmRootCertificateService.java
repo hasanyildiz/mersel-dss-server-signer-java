@@ -24,7 +24,7 @@ import java.util.List;
 @Service
 public class KamusmRootCertificateService {
 
-    private static final Logger logger = LoggerFactory.getLogger(KamusmRootCertificateService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(KamusmRootCertificateService.class);
     
     private final TrustedRootCertificateResolver resolver;
 
@@ -37,20 +37,20 @@ public class KamusmRootCertificateService {
         
         switch (resolverType.toLowerCase()) {
             case "kamusm-online":
-                logger.info("Using KamuSM XML Depo Online Resolver");
+                LOGGER.info("Using KamuSM XML Depo Online Resolver");
                 this.resolver = onlineResolver;
                 break;
             case "kamusm-offline":
-                logger.info("Using KamuSM XML Depo Offline Resolver");
+                LOGGER.info("Using KamuSM XML Depo Offline Resolver");
                 this.resolver = offlineResolver;
                 break;
             case "certificate-folder":
             case "folder":
-                logger.info("Using Certificate Folder Resolver");
+                LOGGER.info("Using Certificate Folder Resolver");
                 this.resolver = folderResolver;
                 break;
             default:
-                logger.warn("Unknown resolver type: {}, defaulting to kamusm-online", resolverType);
+                LOGGER.warn("Unknown resolver type: {}, defaulting to kamusm-online", resolverType);
                 this.resolver = onlineResolver;
         }
     }

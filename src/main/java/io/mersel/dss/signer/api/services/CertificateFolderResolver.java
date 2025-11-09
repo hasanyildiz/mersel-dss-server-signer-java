@@ -29,7 +29,7 @@ import java.util.concurrent.atomic.AtomicReference;
 @Service("certificateFolderResolver")
 public class CertificateFolderResolver implements TrustedRootCertificateResolver {
 
-    private static final Logger logger = LoggerFactory.getLogger(CertificateFolderResolver.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CertificateFolderResolver.class);
     
     private final ResourceLoader resourceLoader;
     private final String folderPath;
@@ -68,11 +68,11 @@ public class CertificateFolderResolver implements TrustedRootCertificateResolver
                         correctedPath.contains("ü") || correctedPath.contains("Ü") ||
                         correctedPath.contains("ç") || correctedPath.contains("Ç")) {
                         folderPath = correctedPath;
-                        logger.debug("Path encoding düzeltildi: {}", folderPath);
+                        LOGGER.debug("Path encoding düzeltildi: {}", folderPath);
                     }
                 }
             } catch (Exception e) {
-                logger.debug("Path encoding düzeltme hatası: {}", e.getMessage());
+                LOGGER.debug("Path encoding düzeltme hatası: {}", e.getMessage());
             }
         }
         this.folderPath = folderPath;
@@ -86,22 +86,22 @@ public class CertificateFolderResolver implements TrustedRootCertificateResolver
         
         try {
             if (folderPath == null || folderPath.trim().isEmpty()) {
-                logger.warn("Sertifika klasoru yolu belirtilmemiş. Sertifika yüklenemiyor.");
+                LOGGER.warn("Sertifika klasoru yolu belirtilmemiş. Sertifika yüklenemiyor.");
                 return;
             }
             
-            logger.info("Sertifika klasorunden güvenilir kök sertifikalar yükleniyor: {}", folderPath);
+            LOGGER.info("Sertifika klasorunden güvenilir kök sertifikalar yükleniyor: {}", folderPath);
             
             // Klasör yolunu çöz
             File certFolder = resolveFolderPath(folderPath);
             if (certFolder == null || !certFolder.exists() || !certFolder.isDirectory()) {
-                logger.warn("Sertifika klasoru bulunamadi veya bir dizin degil: {}", folderPath);
+                LOGGER.warn("Sertifika klasoru bulunamadi veya bir dizin degil: {}", folderPath);
                 return;
             }
             
             List<X509Certificate> certificates = loadCertificatesFromFolder(certFolder);
             if (certificates.isEmpty()) {
-                logger.warn("Klasorde sertifika bulunamadi: {}", folderPath);
+                LOGGER.warn("Klasorde sertifika bulunamadi: {}", folderPath);
                 return;
             }
             
@@ -111,19 +111,19 @@ public class CertificateFolderResolver implements TrustedRootCertificateResolver
             }
             trustedRoots.set(Collections.unmodifiableList(certificates));
             trustedRootTokens.set(Collections.unmodifiableList(tokens));
-            logger.info("Klasorden {} adet güvenilir kök sertifika yuklendi", certificates.size());
+            LOGGER.info("Klasorden {} adet güvenilir kök sertifika yuklendi", certificates.size());
             
             // Trusted certificate source'u da guncelle
             updateTrustedCertificateSource();
             
         } catch (Exception ex) {
-            logger.error("Sertifika klasorunden yukleme basarisiz: {} - mevcut liste korunuyor", ex.getMessage(), ex);
+            LOGGER.error("Sertifika klasorunden yukleme basarisiz: {} - mevcut liste korunuyor", ex.getMessage(), ex);
             
             // Başarısız olursa önceki sertifikaları geri yükle
             if (!previousRoots.isEmpty()) {
                 trustedRoots.set(Collections.unmodifiableList(previousRoots));
                 trustedRootTokens.set(Collections.unmodifiableList(previousTokens));
-                logger.info("Onceki sertifikalar geri yuklendi ({} adet)", previousRoots.size());
+                LOGGER.info("Onceki sertifikalar geri yuklendi ({} adet)", previousRoots.size());
             }
         }
     }
@@ -156,7 +156,7 @@ public class CertificateFolderResolver implements TrustedRootCertificateResolver
                 return new File(path);
             }
         } catch (Exception e) {
-            logger.warn("Klasor yolu cozulemedi: {}", e.getMessage());
+            LOGGER.warn("Klasor yolu cozulemedi: {}", e.getMessage());
         }
         return null;
     }
@@ -171,13 +171,13 @@ public class CertificateFolderResolver implements TrustedRootCertificateResolver
         try {
             cf = CertificateFactory.getInstance("X.509");
         } catch (Exception e) {
-            logger.error("CertificateFactory olusturulamadi: {}", e.getMessage());
+            LOGGER.error("CertificateFactory olusturulamadi: {}", e.getMessage());
             return certificates;
         }
         
         File[] files = folder.listFiles();
         if (files == null) {
-            logger.warn("Klasor okunamadi veya bos: {}", folder.getAbsolutePath());
+            LOGGER.warn("Klasor okunamadi veya bos: {}", folder.getAbsolutePath());
             return certificates;
         }
         
@@ -189,11 +189,11 @@ public class CertificateFolderResolver implements TrustedRootCertificateResolver
                     try (InputStream is = new FileInputStream(file)) {
                         X509Certificate cert = (X509Certificate) cf.generateCertificate(is);
                         certificates.add(cert);
-                        logger.debug("Sertifika yuklendi: {} - Subject: {}", 
+                        LOGGER.debug("Sertifika yuklendi: {} - Subject: {}", 
                             file.getName(), cert.getSubjectDN());
                     }
                 } catch (Exception e) {
-                    logger.warn("Sertifika dosyasi yuklenemedi: {} - {}", file.getName(), e.getMessage());
+                    LOGGER.warn("Sertifika dosyasi yuklenemedi: {} - {}", file.getName(), e.getMessage());
                 }
             }
         }
@@ -214,7 +214,7 @@ public class CertificateFolderResolver implements TrustedRootCertificateResolver
             trustedCertificateSource.addCertificate(token);
         }
         
-        logger.info("Trusted certificate source updated with {} certificates", 
+        LOGGER.info("Trusted certificate source updated with {} certificates", 
             trustedCertificateSource.getCertificates().size());
     }
 
@@ -242,7 +242,7 @@ public class CertificateFolderResolver implements TrustedRootCertificateResolver
             trustedCertificateSource = new CommonTrustedCertificateSource();
         }
         trustedCertificateSource.addCertificate(certificate);
-        logger.info("Added trusted certificate: {}", certificate.getSubject());
+        LOGGER.info("Added trusted certificate: {}", certificate.getSubject());
     }
 
     @Override

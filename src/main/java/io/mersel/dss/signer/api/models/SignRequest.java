@@ -3,7 +3,8 @@ package io.mersel.dss.signer.api.models;
 import io.mersel.dss.signer.api.models.enums.DocumentType;
 
 /**
- * @author erdembas
+ * İmzalama talebi modeli.
+ * XML belgelerinin imzalanması için gereken bilgileri içerir.
  */
 public class SignRequest {
     private byte[] XmlContent;

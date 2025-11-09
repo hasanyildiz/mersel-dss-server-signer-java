@@ -1,7 +1,8 @@
 package io.mersel.dss.signer.api.models.enums;
 
 /**
- * @author erdembas
+ * İmzalanabilir belge tipleri.
+ * e-Fatura, e-Arşiv, İrsaliye ve diğer XML belge formatları.
  */
 public enum DocumentType {
     None,

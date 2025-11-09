@@ -23,7 +23,7 @@ RUN mvn clean package -DskipTests -B
 # Stage 2: Runtime
 FROM eclipse-temurin:8-jre
 
-LABEL maintainer="erdem.bas@mersel.io"
+LABEL maintainer="Mersel <info@mersel.io>"
 LABEL description="Mersel DSS Signer API - Dijital İmza Servisi"
 LABEL version="0.1.0"
 
