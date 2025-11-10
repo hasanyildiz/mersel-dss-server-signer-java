@@ -1,6 +1,7 @@
 package io.mersel.dss.signer.api.controllers;
 
 import io.mersel.dss.signer.api.dtos.TimestampResponseDto;
+import io.mersel.dss.signer.api.dtos.TimestampStatusDto;
 import io.mersel.dss.signer.api.dtos.TimestampValidationResponseDto;
 import io.mersel.dss.signer.api.exceptions.TimestampException;
 import io.mersel.dss.signer.api.models.ErrorModel;
@@ -19,8 +20,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.Map;
 
 /**
  * Zaman damgası (timestamp) işlemleri için REST controller.
@@ -226,17 +225,17 @@ public class TimestampController {
             description = "Servis durumu",
             content = @Content(
                 mediaType = "application/json",
-                schema = @Schema(implementation = Map.class)
+                schema = @Schema(implementation = TimestampStatusDto.class)
             )
         )
     })
     @GetMapping("/status")
-    public ResponseEntity<?> getStatus() {
-        Map<String, Object> status = new java.util.HashMap<>();
-        status.put("configured", timestampConfigurationService.isAvailable());
-        status.put("message", timestampConfigurationService.isAvailable() 
-            ? "Timestamp servisi aktif" 
-            : "Timestamp servisi yapılandırılmamış");
+    public ResponseEntity<TimestampStatusDto> getStatus() {
+        boolean isAvailable = timestampConfigurationService.isAvailable();
+        TimestampStatusDto status = new TimestampStatusDto(
+            isAvailable,
+            isAvailable ? "Timestamp servisi aktif" : "Timestamp servisi yapılandırılmamış"
+        );
         
         return ResponseEntity.ok(status);
     }
