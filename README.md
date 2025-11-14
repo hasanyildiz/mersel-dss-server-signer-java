@@ -12,6 +12,37 @@ Türkiye e-imza standartlarına uygun elektronik imza (XAdES, PAdES, WS-Security
 
 ---
 
+## 🙌 Katkıda Bulunanlar
+
+Bu projeye emek veren herkese içtenlikle teşekkür ederiz. Kod katkısı yapan, önerileriyle geliştirmeye yön veren veya hataları fark edip bildiren herkes, projenin bugün olduğu noktaya gelmesinde önemli bir paya sahip.
+
+Aynı şekilde, geliştirme sürecinde destek sunan kurumlara da ayrıca teşekkür ederiz.Birlikte hareket etmenin, bilgiyi paylaşmanın ve ortak bir değeri büyütmenin kıymetini çok iyi biliyoruz.
+
+Açık kaynağın gücüne inanıyor ve birlikte daha iyisini üretmeye devam ediyoruz. 🚀
+
+### Bireysel Katkı Sahipleri
+
+| Katkıda Bulunan | Kurum |
+| --- | --- |
+| [@hasanyildiz](https://github.com/hasanyildiz) | İZİBİZ Bilişim Teknolojileri Anonim Şirketi |
+| [@emresimsk](https://github.com/emresimsk) | IDECON DANIŞMANLIK HİZMETLERİ ANONİM ŞİRKETİ |
+
+### Kurumsal Destekçiler
+
+| Kurum | Katkı Türü |
+| --- | --- |
+| İzibiz | Geliştirme desteği |
+| İdecon | Geliştirme desteği |
+
+### Öne Çıkan Pull Request / Issue Katkıları
+
+| Tür | Referans | Açıklama | Katkıda Bulunan |
+| --- | --- | --- | --- |
+| PR | [#3](https://github.com/mersel-dss/mersel-dss-server-signer-java/pull/3) | TÜBİTAK XAdES için ECDSA doğrulama özelleştirmeleri | [@hasanyildiz](https://github.com/hasanyildiz) |
+| PR | [#6](https://github.com/mersel-dss/mersel-dss-server-signer-java/pull/6) | PKCS#11 `slot` ve `slotListIndex` yapılandırması geliştirmesi | [@hasanyildiz](https://github.com/hasanyildiz) |
+
+---
+
 ## 📚 Tam Dökümantasyon
 
 ### 👉 [Sign Platform Dökümanları](https://dss.mersel.dev) 👈
